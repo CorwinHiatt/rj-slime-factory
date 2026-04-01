@@ -235,7 +235,7 @@ export default function HomePage() {
             <div className="relative">
               <div className="aspect-square rounded-[3rem] overflow-hidden shadow-2xl">
                 <Image
-                  src="https://images.unsplash.com/photo-1633091096498-5eb8cfa43e43?w=800&q=80"
+                  src="https://images.unsplash.com/photo-1614849286521-4c58b2f0ff15?w=800&q=80"
                   alt="Handcrafted slime being made"
                   fill
                   sizes="(max-width: 768px) 100vw, 50vw"

@@ -16,6 +16,9 @@ const footerLinks = {
     { label: 'Contact', href: '/contact' },
     { label: 'Slime Care', href: '/about#slime-care' },
     { label: 'FAQ', href: '/contact#faq' },
+    { label: 'Shipping & Returns', href: '/shipping' },
+    { label: 'Privacy Policy', href: '/privacy' },
+    { label: 'Terms of Service', href: '/terms' },
   ],
   social: [
     { label: 'Instagram', href: 'https://instagram.com' },
@@ -126,13 +129,13 @@ export default function Footer() {
             &copy; {new Date().getFullYear()} RJ Slime Factory. All rights reserved.
           </p>
           <div className="flex items-center gap-6 text-gray-500 text-sm">
-            <Link href="/contact" className="hover:text-slime-pink transition-colors">
+            <Link href="/privacy" className="hover:text-slime-pink transition-colors">
               Privacy Policy
             </Link>
-            <Link href="/contact" className="hover:text-slime-pink transition-colors">
+            <Link href="/terms" className="hover:text-slime-pink transition-colors">
               Terms of Service
             </Link>
-            <Link href="/contact" className="hover:text-slime-pink transition-colors">
+            <Link href="/shipping" className="hover:text-slime-pink transition-colors">
               Shipping
             </Link>
           </div>
