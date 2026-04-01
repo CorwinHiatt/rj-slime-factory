@@ -1,6 +1,31 @@
+import type { Metadata } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
 import { ArrowRight, Heart, Sparkles, Shield, Leaf } from 'lucide-react';
+
+export const metadata: Metadata = {
+  title: 'About RJ Slime Factory - Meet River Jordan Hiatt',
+  description:
+    'Meet River Jordan Hiatt, the young entrepreneur behind RJ Slime Factory in Bend, Oregon. Learn about our story, values, slime care tips, and what makes our handcrafted slime the best.',
+  keywords: [
+    'RJ Slime Factory about',
+    'River Jordan Hiatt',
+    'slime maker Bend Oregon',
+    'young entrepreneur slime',
+    'handcrafted slime story',
+    'slime care guide',
+    'how to care for slime',
+  ],
+  openGraph: {
+    title: 'About RJ Slime Factory | Meet the Founder - Bend, OR',
+    description:
+      'Meet River Jordan Hiatt, the young entrepreneur behind RJ Slime Factory. Handcrafted slime made with passion in Bend, Oregon.',
+    url: 'https://rjslime.xyz/about',
+  },
+  alternates: {
+    canonical: 'https://rjslime.xyz/about',
+  },
+};
 
 const values = [
   {

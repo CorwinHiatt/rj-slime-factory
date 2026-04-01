@@ -65,7 +65,7 @@ export default function Footer() {
           <div className="md:col-span-1">
             <Logo className="h-12 w-auto mb-4 brightness-0 invert" />
             <p className="text-gray-400 text-sm leading-relaxed">
-              Handcrafted slime made with love. Satisfying textures, amazing scents, and endless fun.
+              Handcrafted slime made with love in Bend, Oregon. Satisfying textures, amazing scents, shipped nationwide.
             </p>
           </div>
 

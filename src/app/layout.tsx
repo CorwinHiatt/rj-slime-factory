@@ -5,6 +5,7 @@ import { CartProvider } from '@/context/CartContext';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import CartDrawer from '@/components/CartDrawer';
+import LocalBusinessSchema, { WebsiteSchema } from '@/components/LocalBusinessSchema';
 
 const fredoka = Fredoka({
   subsets: ['latin'],
@@ -19,28 +20,89 @@ const poppins = Poppins({
   display: 'swap',
 });
 
+const siteUrl = 'https://rjslime.xyz';
+
 export const metadata: Metadata = {
-  title: 'RJ Slime Factory | Handcrafted Slime Shop',
+  metadataBase: new URL(siteUrl),
+  title: {
+    default: 'RJ Slime Factory | Handcrafted Slime Shop in Bend, Oregon',
+    template: '%s | RJ Slime Factory - Bend, OR',
+  },
   description:
-    'Premium handcrafted slime made with love. Cloud, butter, clear, crunchy, and more. Satisfying textures, amazing scents, and endless fun. Shop the latest drops now!',
+    'Premium handcrafted slime made in Bend, Oregon by young entrepreneur River Jordan Hiatt. Shop cloud slime, butter slime, clear slime, crunchy slime, and more. Satisfying textures, custom scents, shipped nationwide. New drops every Friday.',
   keywords: [
-    'slime',
     'slime shop',
     'handmade slime',
     'cloud slime',
     'butter slime',
+    'clear slime',
+    'crunchy slime',
+    'fluffy slime',
+    'glitter slime',
     'ASMR slime',
+    'buy slime online',
+    'slime shop Bend Oregon',
     'RJ Slime Factory',
+    'satisfying slime',
+    'slime for kids',
+    'custom scented slime',
+    'Oregon slime shop',
+    'handcrafted slime',
+    'slime store',
+    'best slime shop',
+    'slime delivery',
   ],
+  authors: [{ name: 'RJ Slime Factory' }],
+  creator: 'RJ Slime Factory',
+  publisher: 'RJ Slime Factory',
+  formatDetection: {
+    email: false,
+    address: false,
+    telephone: false,
+  },
   icons: {
     icon: '/favicon.svg',
+    apple: '/favicon.svg',
   },
   openGraph: {
-    title: 'RJ Slime Factory | Handcrafted Slime Shop',
-    description:
-      'Premium handcrafted slime. Satisfying textures, amazing scents, endless fun.',
     type: 'website',
+    locale: 'en_US',
+    url: siteUrl,
+    siteName: 'RJ Slime Factory',
+    title: 'RJ Slime Factory | Handcrafted Slime Shop in Bend, Oregon',
+    description:
+      'Premium handcrafted slime made in Bend, Oregon. Cloud, butter, clear, crunchy slime and more. Satisfying textures, custom scents, new drops every Friday. Shop now!',
+    images: [
+      {
+        url: '/og-image.png',
+        width: 1200,
+        height: 630,
+        alt: 'RJ Slime Factory - Handcrafted Slime from Bend, Oregon',
+      },
+    ],
   },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'RJ Slime Factory | Handcrafted Slime Shop in Bend, Oregon',
+    description:
+      'Premium handcrafted slime made in Bend, OR. Cloud, butter, clear, crunchy slime and more. New drops every Friday!',
+    images: ['/og-image.png'],
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
+  },
+  alternates: {
+    canonical: siteUrl,
+  },
+  category: 'shopping',
 };
 
 export default function RootLayout({
@@ -50,6 +112,10 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={`${fredoka.variable} ${poppins.variable}`}>
+      <head>
+        <LocalBusinessSchema />
+        <WebsiteSchema />
+      </head>
       <body className="min-h-screen flex flex-col bg-white">
         <CartProvider>
           <Header />

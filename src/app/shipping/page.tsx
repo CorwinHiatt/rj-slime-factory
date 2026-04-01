@@ -1,5 +1,20 @@
+import type { Metadata } from 'next';
 import Link from 'next/link';
 import { Truck, Clock, Package, RefreshCw } from 'lucide-react';
+
+export const metadata: Metadata = {
+  title: 'Shipping & Returns',
+  description:
+    'RJ Slime Factory shipping and return policy. Free shipping on orders over $50. Standard delivery 3-5 business days. Ships from Bend, Oregon nationwide. 14-day return window on unopened items.',
+  keywords: [
+    'slime shipping',
+    'slime delivery',
+    'free shipping slime',
+    'slime return policy',
+    'RJ Slime Factory shipping',
+  ],
+  alternates: { canonical: 'https://rjslime.xyz/shipping' },
+};
 
 const shippingOptions = [
   {
@@ -75,7 +90,7 @@ export default function ShippingPage() {
             <h2 className="font-display text-2xl font-bold mb-3">Shipping Policy</h2>
             <div className="text-gray-600 space-y-3 leading-relaxed">
               <p>
-                All orders are processed within <strong>1-3 business days</strong> (Monday-Friday, excluding holidays). Because every slime is handcrafted fresh, we need a bit of time to make yours perfect.
+                All orders are processed from our studio in Bend, Oregon within <strong>1-3 business days</strong> (Monday-Friday, excluding holidays). Because every slime is handcrafted fresh, we need a bit of time to make yours perfect.
               </p>
               <p>
                 Standard shipping within the United States takes <strong>3-5 business days</strong> after processing. You will receive a tracking number via email once your order ships.

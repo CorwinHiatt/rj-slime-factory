@@ -1,4 +1,12 @@
+import type { Metadata } from 'next';
 import Link from 'next/link';
+
+export const metadata: Metadata = {
+  title: 'Privacy Policy',
+  description:
+    'RJ Slime Factory privacy policy. Learn how we collect, use, and protect your personal information when you shop for handcrafted slime.',
+  alternates: { canonical: 'https://rjslime.xyz/privacy' },
+};
 
 export default function PrivacyPage() {
   return (

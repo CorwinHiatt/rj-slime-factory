@@ -1,4 +1,12 @@
+import type { Metadata } from 'next';
 import Link from 'next/link';
+
+export const metadata: Metadata = {
+  title: 'Terms of Service',
+  description:
+    'RJ Slime Factory terms of service. Read our product use guidelines, payment terms, safety information, and return policies for handcrafted slime.',
+  alternates: { canonical: 'https://rjslime.xyz/terms' },
+};
 
 export default function TermsPage() {
   return (

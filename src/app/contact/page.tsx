@@ -13,13 +13,13 @@ const contactInfo = [
   {
     icon: MapPin,
     title: 'Location',
-    detail: 'United States',
+    detail: 'Bend, Oregon',
     sub: 'Online shop, shipping nationwide',
   },
   {
     icon: Clock,
     title: 'Hours',
-    detail: 'Mon-Fri 9AM-5PM EST',
+    detail: 'Mon-Fri 9AM-5PM PST',
     sub: 'New drops every Friday at 5PM',
   },
   {

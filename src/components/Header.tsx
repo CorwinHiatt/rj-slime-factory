@@ -28,25 +28,25 @@ export default function Header() {
             FREE SHIPPING ON ORDERS OVER $50
           </span>
           <span className="mx-8 whitespace-nowrap">
-            NEW DROPS EVERY FRIDAY AT 5PM EST
+            NEW DROPS EVERY FRIDAY AT 5PM PST
           </span>
           <span className="mx-8 whitespace-nowrap">
             USE CODE SLIMELOVE FOR 10% OFF YOUR FIRST ORDER
           </span>
           <span className="mx-8 whitespace-nowrap">
-            HANDMADE WITH LOVE IN THE USA
+            HANDMADE WITH LOVE IN BEND, OREGON
           </span>
           <span className="mx-8 whitespace-nowrap">
             FREE SHIPPING ON ORDERS OVER $50
           </span>
           <span className="mx-8 whitespace-nowrap">
-            NEW DROPS EVERY FRIDAY AT 5PM EST
+            NEW DROPS EVERY FRIDAY AT 5PM PST
           </span>
           <span className="mx-8 whitespace-nowrap">
             USE CODE SLIMELOVE FOR 10% OFF YOUR FIRST ORDER
           </span>
           <span className="mx-8 whitespace-nowrap">
-            HANDMADE WITH LOVE IN THE USA
+            HANDMADE WITH LOVE IN BEND, OREGON
           </span>
         </div>
       </div>
