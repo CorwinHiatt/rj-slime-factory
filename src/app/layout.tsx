@@ -72,21 +72,12 @@ export const metadata: Metadata = {
     title: 'RJ Slime Factory | Handcrafted Slime Shop in Bend, Oregon',
     description:
       'Premium handcrafted slime made in Bend, Oregon. Cloud, butter, clear, crunchy slime and more. Satisfying textures, custom scents, new drops every Friday. Shop now!',
-    images: [
-      {
-        url: '/og-image.png',
-        width: 1200,
-        height: 630,
-        alt: 'RJ Slime Factory - Handcrafted Slime from Bend, Oregon',
-      },
-    ],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'RJ Slime Factory | Handcrafted Slime Shop in Bend, Oregon',
     description:
       'Premium handcrafted slime made in Bend, OR. Cloud, butter, clear, crunchy slime and more. New drops every Friday!',
-    images: ['/og-image.png'],
   },
   robots: {
     index: true,
