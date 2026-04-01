@@ -21,7 +21,7 @@ interface OrderItem {
 
 interface CheckoutRequest {
   shipping: ShippingInfo;
-  paymentToken: string; // Mock token - never real card data
+  paymentToken: string;
   items: OrderItem[];
   subtotal: number;
   shipping_cost: number;
@@ -35,11 +35,6 @@ function validateEmail(email: string): boolean {
 
 function validateZip(zip: string): boolean {
   return /^\d{5}(-\d{4})?$/.test(zip);
-}
-
-function validatePhone(phone: string): boolean {
-  const digits = phone.replace(/\D/g, '');
-  return digits.length === 10 || digits.length === 11;
 }
 
 const US_STATES = [
@@ -58,17 +53,15 @@ function generateOrderId(): string {
 export async function POST(request: Request) {
   try {
     const body: CheckoutRequest = await request.json();
-    const { shipping, paymentToken, items, subtotal, shipping_cost, tax, total } = body;
+    const { shipping, paymentToken, items, subtotal } = body;
 
-    // Validate required fields
     const errors: string[] = [];
 
+    // Validate shipping
     if (!shipping.firstName?.trim()) errors.push('First name is required');
     if (!shipping.lastName?.trim()) errors.push('Last name is required');
     if (!shipping.email?.trim()) errors.push('Email is required');
     else if (!validateEmail(shipping.email)) errors.push('Invalid email address');
-    if (!shipping.phone?.trim()) errors.push('Phone number is required');
-    else if (!validatePhone(shipping.phone)) errors.push('Invalid phone number');
     if (!shipping.address?.trim()) errors.push('Street address is required');
     if (!shipping.city?.trim()) errors.push('City is required');
     if (!shipping.state?.trim()) errors.push('State is required');
@@ -80,28 +73,19 @@ export async function POST(request: Request) {
     if (!items || items.length === 0) errors.push('Cart is empty');
 
     // Validate totals
-    const calculatedSubtotal = items.reduce((sum, item) => sum + item.price * item.quantity, 0);
-    if (Math.abs(calculatedSubtotal - subtotal) > 0.01) {
-      errors.push('Order total mismatch - please refresh and try again');
+    if (items && items.length > 0) {
+      const calculatedSubtotal = items.reduce((sum, item) => sum + item.price * item.quantity, 0);
+      if (Math.abs(calculatedSubtotal - subtotal) > 0.01) {
+        errors.push('Order total mismatch — please refresh and try again');
+      }
     }
 
     if (errors.length > 0) {
       return NextResponse.json({ success: false, errors }, { status: 400 });
     }
 
-    // Simulate payment processing delay (1-2 seconds)
-    await new Promise((resolve) => setTimeout(resolve, 1000 + Math.random() * 1000));
-
-    // Mock: 2% chance of payment decline for realism
-    if (Math.random() < 0.02) {
-      return NextResponse.json(
-        {
-          success: false,
-          errors: ['Payment was declined. Please check your card details and try again.'],
-        },
-        { status: 402 }
-      );
-    }
+    // Simulate processing delay
+    await new Promise((resolve) => setTimeout(resolve, 500 + Math.random() * 500));
 
     const orderId = generateOrderId();
     const estimatedDelivery = new Date();
@@ -112,21 +96,13 @@ export async function POST(request: Request) {
       order: {
         id: orderId,
         email: shipping.email,
-        total,
+        total: body.total,
         itemCount: items.reduce((sum, item) => sum + item.quantity, 0),
         estimatedDelivery: estimatedDelivery.toLocaleDateString('en-US', {
           weekday: 'long',
           month: 'long',
           day: 'numeric',
         }),
-        shippingAddress: {
-          name: `${shipping.firstName} ${shipping.lastName}`,
-          address: shipping.address,
-          apartment: shipping.apartment,
-          city: shipping.city,
-          state: shipping.state,
-          zip: shipping.zip,
-        },
       },
     });
   } catch {
