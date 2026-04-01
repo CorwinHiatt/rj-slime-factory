@@ -12,45 +12,45 @@ const footerLinks = {
     { label: 'Crunchy Slime', href: '/shop?category=crunchy' },
   ],
   company: [
-    { label: 'About Us', href: '/about' },
+    { label: 'About', href: '/about' },
     { label: 'Contact', href: '/contact' },
     { label: 'Slime Care', href: '/about#slime-care' },
     { label: 'FAQ', href: '/contact#faq' },
+  ],
+  support: [
     { label: 'Shipping & Returns', href: '/shipping' },
     { label: 'Privacy Policy', href: '/privacy' },
     { label: 'Terms of Service', href: '/terms' },
-  ],
-  social: [
-    { label: 'Instagram', href: 'https://instagram.com' },
-    { label: 'TikTok', href: 'https://tiktok.com' },
-    { label: 'YouTube', href: 'https://youtube.com' },
-    { label: 'Pinterest', href: 'https://pinterest.com' },
   ],
 };
 
 export default function Footer() {
   return (
-    <footer className="bg-slime-dark text-white">
+    <footer className="bg-slime-dark text-white relative noise">
       {/* Newsletter */}
-      <div className="border-b border-white/10">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-          <div className="max-w-2xl mx-auto text-center">
-            <h3 className="font-display text-3xl font-bold mb-3 gradient-text">
+      <div className="border-b border-white/[0.06]">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+          <div className="max-w-xl mx-auto text-center relative z-10">
+            <p className="text-[11px] font-medium tracking-[0.2em] uppercase text-slime-pink/80 mb-4">
+              Stay in the loop
+            </p>
+            <h3 className="font-display text-3xl sm:text-4xl font-bold mb-4 text-white">
               Don&apos;t Miss a Drop
             </h3>
-            <p className="text-gray-400 mb-6">
-              Be the first to know about new slimes, restocks, and exclusive deals.
+            <p className="text-gray-500 mb-8 text-[15px]">
+              New slimes, restocks, and exclusive deals. Straight to your inbox.
             </p>
             <form
-              className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto"
+              className="flex flex-col sm:flex-row gap-3"
               onSubmit={(e) => e.preventDefault()}
             >
               <input
                 type="email"
-                placeholder="Enter your email"
-                className="flex-1 px-5 py-3 rounded-full bg-white/10 border border-white/20 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-slime-pink focus:border-transparent"
+                placeholder="your@email.com"
+                className="flex-1 px-5 py-3.5 rounded-xl bg-white/[0.06] border border-white/[0.08] text-white placeholder-gray-500 text-sm
+                  focus:outline-none focus:ring-2 focus:ring-slime-pink/40 focus:border-transparent transition-all duration-300"
               />
-              <button type="submit" className="btn-primary whitespace-nowrap">
+              <button type="submit" className="btn-primary whitespace-nowrap text-sm px-7">
                 Subscribe
               </button>
             </form>
@@ -59,26 +59,23 @@ export default function Footer() {
       </div>
 
       {/* Links */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-10">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 relative z-10">
+        <div className="grid grid-cols-2 md:grid-cols-5 gap-10">
           {/* Brand */}
-          <div className="md:col-span-1">
-            <Logo className="h-12 w-auto mb-4 brightness-0 invert" />
-            <p className="text-gray-400 text-sm leading-relaxed">
+          <div className="col-span-2">
+            <Logo className="h-11 w-auto mb-5 brightness-0 invert opacity-80" />
+            <p className="text-gray-500 text-sm leading-relaxed max-w-xs">
               Handcrafted slime made with love in Bend, Oregon. Satisfying textures, amazing scents, shipped nationwide.
             </p>
           </div>
 
-          {/* Shop Links */}
+          {/* Shop */}
           <div>
-            <h4 className="font-display font-semibold text-lg mb-4">Shop</h4>
-            <ul className="space-y-2.5">
+            <h4 className="font-display font-semibold text-sm text-white/60 uppercase tracking-wider mb-5">Shop</h4>
+            <ul className="space-y-3">
               {footerLinks.shop.map((link) => (
                 <li key={link.label}>
-                  <Link
-                    href={link.href}
-                    className="text-gray-400 hover:text-slime-pink transition-colors text-sm"
-                  >
+                  <Link href={link.href} className="text-gray-500 hover:text-white transition-colors duration-300 text-sm">
                     {link.label}
                   </Link>
                 </li>
@@ -86,16 +83,13 @@ export default function Footer() {
             </ul>
           </div>
 
-          {/* Company Links */}
+          {/* Company */}
           <div>
-            <h4 className="font-display font-semibold text-lg mb-4">Company</h4>
-            <ul className="space-y-2.5">
+            <h4 className="font-display font-semibold text-sm text-white/60 uppercase tracking-wider mb-5">Company</h4>
+            <ul className="space-y-3">
               {footerLinks.company.map((link) => (
                 <li key={link.label}>
-                  <Link
-                    href={link.href}
-                    className="text-gray-400 hover:text-slime-pink transition-colors text-sm"
-                  >
+                  <Link href={link.href} className="text-gray-500 hover:text-white transition-colors duration-300 text-sm">
                     {link.label}
                   </Link>
                 </li>
@@ -103,20 +97,15 @@ export default function Footer() {
             </ul>
           </div>
 
-          {/* Social Links */}
+          {/* Support */}
           <div>
-            <h4 className="font-display font-semibold text-lg mb-4">Follow Us</h4>
-            <ul className="space-y-2.5">
-              {footerLinks.social.map((link) => (
+            <h4 className="font-display font-semibold text-sm text-white/60 uppercase tracking-wider mb-5">Support</h4>
+            <ul className="space-y-3">
+              {footerLinks.support.map((link) => (
                 <li key={link.label}>
-                  <a
-                    href={link.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-gray-400 hover:text-slime-pink transition-colors text-sm"
-                  >
+                  <Link href={link.href} className="text-gray-500 hover:text-white transition-colors duration-300 text-sm">
                     {link.label}
-                  </a>
+                  </Link>
                 </li>
               ))}
             </ul>
@@ -124,21 +113,13 @@ export default function Footer() {
         </div>
 
         {/* Bottom bar */}
-        <div className="border-t border-white/10 mt-12 pt-8 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <p className="text-gray-500 text-sm">
+        <div className="border-t border-white/[0.06] mt-16 pt-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+          <p className="text-gray-600 text-xs">
             &copy; {new Date().getFullYear()} RJ Slime Factory. All rights reserved.
           </p>
-          <div className="flex items-center gap-6 text-gray-500 text-sm">
-            <Link href="/privacy" className="hover:text-slime-pink transition-colors">
-              Privacy Policy
-            </Link>
-            <Link href="/terms" className="hover:text-slime-pink transition-colors">
-              Terms of Service
-            </Link>
-            <Link href="/shipping" className="hover:text-slime-pink transition-colors">
-              Shipping
-            </Link>
-          </div>
+          <p className="text-gray-600 text-xs">
+            Bend, Oregon
+          </p>
         </div>
       </div>
     </footer>

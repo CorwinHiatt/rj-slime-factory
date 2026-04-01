@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { ShoppingBag, Menu, X } from 'lucide-react';
@@ -18,75 +18,83 @@ export default function Header() {
   const pathname = usePathname();
   const { openCart, totalItems } = useCart();
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 10);
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
 
   return (
     <>
       {/* Announcement Bar */}
-      <div className="bg-gradient-to-r from-slime-pink via-slime-purple to-slime-teal text-white text-sm font-medium overflow-hidden">
-        <div className="animate-marquee-wrapper animate-marquee py-2">
-          <span className="mx-8 whitespace-nowrap">
-            FREE SHIPPING ON ORDERS OVER $50
-          </span>
-          <span className="mx-8 whitespace-nowrap">
-            NEW DROPS EVERY FRIDAY AT 5PM PST
-          </span>
-          <span className="mx-8 whitespace-nowrap">
-            USE CODE SLIMELOVE FOR 10% OFF YOUR FIRST ORDER
-          </span>
-          <span className="mx-8 whitespace-nowrap">
-            HANDMADE WITH LOVE IN BEND, OREGON
-          </span>
-          <span className="mx-8 whitespace-nowrap">
-            FREE SHIPPING ON ORDERS OVER $50
-          </span>
-          <span className="mx-8 whitespace-nowrap">
-            NEW DROPS EVERY FRIDAY AT 5PM PST
-          </span>
-          <span className="mx-8 whitespace-nowrap">
-            USE CODE SLIMELOVE FOR 10% OFF YOUR FIRST ORDER
-          </span>
-          <span className="mx-8 whitespace-nowrap">
-            HANDMADE WITH LOVE IN BEND, OREGON
-          </span>
+      <div className="bg-slime-dark text-white/80 text-xs font-medium overflow-hidden tracking-widest uppercase">
+        <div className="animate-marquee-wrapper animate-marquee py-2.5">
+          {[
+            'Free shipping on orders over $50',
+            'New drops every Friday at 5PM PST',
+            'Use code SLIMELOVE for 10% off',
+            'Handmade with love in Bend, Oregon',
+          ].flatMap((text, i) => [
+            <span key={`a${i}`} className="mx-10 whitespace-nowrap">{text}</span>,
+            <span key={`d${i}`} className="mx-2 text-slime-purple/60 whitespace-nowrap">&#9679;</span>,
+          ]).concat([
+            'Free shipping on orders over $50',
+            'New drops every Friday at 5PM PST',
+            'Use code SLIMELOVE for 10% off',
+            'Handmade with love in Bend, Oregon',
+          ].flatMap((text, i) => [
+            <span key={`b${i}`} className="mx-10 whitespace-nowrap">{text}</span>,
+            <span key={`e${i}`} className="mx-2 text-slime-purple/60 whitespace-nowrap">&#9679;</span>,
+          ]))}
         </div>
       </div>
 
       {/* Main Header */}
-      <header className="sticky top-0 z-50 glass shadow-sm">
+      <header
+        className={`sticky top-0 z-50 transition-all duration-500 ${
+          scrolled
+            ? 'glass shadow-sm'
+            : 'bg-white/0 backdrop-blur-none border-b border-transparent'
+        }`}
+      >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-20">
+          <div className="flex items-center justify-between h-[72px]">
             {/* Mobile menu button */}
             <button
-              className="lg:hidden p-2 rounded-lg hover:bg-gray-100 transition-colors"
+              className="lg:hidden p-2 -ml-2 rounded-xl hover:bg-gray-100/80 transition-colors"
               onClick={() => setMobileOpen(!mobileOpen)}
               aria-label="Toggle menu"
             >
-              {mobileOpen ? <X size={24} /> : <Menu size={24} />}
+              {mobileOpen ? <X size={22} /> : <Menu size={22} />}
             </button>
 
             {/* Logo */}
-            <Link href="/" className="flex-shrink-0">
-              <Logo className="h-12 w-auto" />
+            <Link href="/" className="flex-shrink-0 transition-transform duration-300 hover:scale-[1.02]">
+              <Logo className="h-11 w-auto" />
             </Link>
 
             {/* Desktop Nav */}
-            <nav className="hidden lg:flex items-center gap-8">
+            <nav className="hidden lg:flex items-center gap-10">
               {navLinks.map((link) => (
                 <Link
                   key={link.href}
                   href={link.href}
-                  className={`font-display font-medium text-base transition-all duration-300 relative
+                  className={`font-display font-medium text-[15px] transition-all duration-300 relative py-1
                     ${
                       pathname === link.href
-                        ? 'text-slime-pink'
-                        : 'text-slime-dark hover:text-slime-purple'
+                        ? 'text-slime-dark'
+                        : 'text-gray-400 hover:text-slime-dark'
                     }
                   `}
                 >
                   {link.label}
-                  {pathname === link.href && (
-                    <span className="absolute -bottom-1 left-0 right-0 h-0.5 bg-gradient-to-r from-slime-pink to-slime-purple rounded-full" />
-                  )}
+                  <span
+                    className={`absolute -bottom-0.5 left-0 right-0 h-[2px] rounded-full bg-slime-pink transition-all duration-300 ${
+                      pathname === link.href ? 'opacity-100 scale-x-100' : 'opacity-0 scale-x-0'
+                    }`}
+                  />
                 </Link>
               ))}
             </nav>
@@ -94,12 +102,12 @@ export default function Header() {
             {/* Cart Button */}
             <button
               onClick={openCart}
-              className="relative p-2 rounded-lg hover:bg-gray-100 transition-colors"
+              className="relative p-2 -mr-2 rounded-xl hover:bg-gray-100/80 transition-all duration-300 group"
               aria-label="Open cart"
             >
-              <ShoppingBag size={24} className="text-slime-dark" />
+              <ShoppingBag size={22} className="text-slime-dark group-hover:text-slime-purple transition-colors" />
               {totalItems > 0 && (
-                <span className="absolute -top-1 -right-1 bg-slime-pink text-white text-xs font-bold w-5 h-5 rounded-full flex items-center justify-center animate-slide-up">
+                <span className="absolute -top-0.5 -right-0.5 bg-slime-pink text-white text-[10px] font-bold w-[18px] h-[18px] rounded-full flex items-center justify-center ring-2 ring-white">
                   {totalItems}
                 </span>
               )}
@@ -108,28 +116,30 @@ export default function Header() {
         </div>
 
         {/* Mobile Nav */}
-        {mobileOpen && (
-          <div className="lg:hidden border-t border-gray-100 animate-slide-up">
-            <nav className="flex flex-col py-4 px-4 gap-1">
-              {navLinks.map((link) => (
-                <Link
-                  key={link.href}
-                  href={link.href}
-                  onClick={() => setMobileOpen(false)}
-                  className={`font-display font-medium text-base py-3 px-4 rounded-xl transition-all
-                    ${
-                      pathname === link.href
-                        ? 'bg-slime-pink/10 text-slime-pink'
-                        : 'text-slime-dark hover:bg-gray-50'
-                    }
-                  `}
-                >
-                  {link.label}
-                </Link>
-              ))}
-            </nav>
-          </div>
-        )}
+        <div
+          className={`lg:hidden overflow-hidden transition-all duration-500 ease-out ${
+            mobileOpen ? 'max-h-80 opacity-100' : 'max-h-0 opacity-0'
+          }`}
+        >
+          <nav className="flex flex-col py-3 px-4 gap-0.5 border-t border-gray-100">
+            {navLinks.map((link) => (
+              <Link
+                key={link.href}
+                href={link.href}
+                onClick={() => setMobileOpen(false)}
+                className={`font-display font-medium text-[15px] py-3 px-4 rounded-xl transition-all duration-300
+                  ${
+                    pathname === link.href
+                      ? 'bg-slime-pink/5 text-slime-pink'
+                      : 'text-gray-500 hover:bg-gray-50 hover:text-slime-dark'
+                  }
+                `}
+              >
+                {link.label}
+              </Link>
+            ))}
+          </nav>
+        </div>
       </header>
     </>
   );
