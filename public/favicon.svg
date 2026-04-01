@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <defs>
+    <linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FF6B9D"/>
+      <stop offset="50%" stop-color="#8B5CF6"/>
+      <stop offset="100%" stop-color="#06D6A0"/>
+    </linearGradient>
+  </defs>
+  <!-- Main blob -->
+  <path d="M12 22C12 10 22 2 32 2C42 2 52 10 52 22C52 34 46 42 42 48C38 54 34 58 32 60C30 58 26 54 22 48C18 42 12 34 12 22Z" fill="url(#g)"/>
+  <!-- Drip left -->
+  <path d="M20 40C20 40 17 50 17 54C17 57 19 59 21 59C23 59 25 57 25 54C25 50 20 40 20 40Z" fill="#E855A0" opacity="0.8"/>
+  <!-- Drip right -->
+  <path d="M44 38C44 38 47 48 47 52C47 55 45 57 43 57C41 57 39 55 39 52C39 48 44 38 44 38Z" fill="#8B5CF6" opacity="0.7"/>
+  <!-- Shine -->
+  <ellipse cx="26" cy="16" rx="6" ry="5" fill="white" opacity="0.4"/>
+  <!-- R letter -->
+  <text x="24" y="34" font-family="Arial,sans-serif" font-weight="bold" font-size="18" fill="white" text-anchor="middle">R</text>
+  <text x="40" y="34" font-family="Arial,sans-serif" font-weight="bold" font-size="18" fill="white" text-anchor="middle">J</text>
+</svg>

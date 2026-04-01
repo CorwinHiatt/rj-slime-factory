@@ -1,0 +1,92 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply font-body text-slime-dark antialiased;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-display;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply inline-flex items-center justify-center px-8 py-3 bg-slime-pink text-white font-display font-semibold rounded-full
+      hover:bg-pink-600 transform hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl;
+  }
+
+  .btn-secondary {
+    @apply inline-flex items-center justify-center px-8 py-3 border-2 border-slime-purple text-slime-purple font-display font-semibold rounded-full
+      hover:bg-slime-purple hover:text-white transform hover:scale-105 transition-all duration-300;
+  }
+
+  .btn-cart {
+    @apply inline-flex items-center justify-center px-6 py-2.5 bg-slime-purple text-white font-display font-medium rounded-full text-sm
+      hover:bg-purple-700 transform hover:scale-105 transition-all duration-300 shadow-md hover:shadow-lg;
+  }
+
+  .gradient-text {
+    @apply bg-gradient-to-r from-slime-pink via-slime-purple to-slime-teal bg-clip-text text-transparent;
+  }
+
+  .card-hover {
+    @apply transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl;
+  }
+
+  .glass {
+    @apply bg-white/80 backdrop-blur-lg border border-white/20;
+  }
+
+  .section-padding {
+    @apply px-4 sm:px-6 lg:px-8 py-16 sm:py-20 lg:py-24;
+  }
+
+  .product-image-wrapper {
+    @apply relative overflow-hidden rounded-2xl aspect-square;
+  }
+
+  .product-image-wrapper::after {
+    content: '';
+    @apply absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 transition-opacity duration-300;
+  }
+
+  .product-image-wrapper:hover::after {
+    @apply opacity-100;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-gray-100;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-slime-pink/40 rounded-full;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-slime-pink/60;
+}
+
+/* Announcement bar animation */
+.animate-marquee-wrapper {
+  display: flex;
+  width: max-content;
+}
