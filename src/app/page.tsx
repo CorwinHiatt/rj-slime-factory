@@ -108,7 +108,7 @@ export default function HomePage() {
                 <div className="absolute inset-0 bg-gradient-to-br from-slime-pink/30 via-slime-purple/30 to-slime-teal/30 rounded-[3rem] rotate-6" />
                 <div className="absolute inset-0 rounded-[3rem] overflow-hidden shadow-2xl">
                   <Image
-                    src="https://images.unsplash.com/photo-1559181567-c3190ca9959b?w=800&q=80"
+                    src="https://images.unsplash.com/photo-1558591710-4b4a1ae0f04d?w=800&q=80"
                     alt="Colorful handcrafted slime collection"
                     fill
                     sizes="(max-width: 768px) 100vw, 50vw"
@@ -235,7 +235,7 @@ export default function HomePage() {
             <div className="relative">
               <div className="aspect-square rounded-[3rem] overflow-hidden shadow-2xl">
                 <Image
-                  src="https://images.pexels.com/photos/6144294/pexels-photo-6144294.jpeg?w=800"
+                  src="https://images.unsplash.com/photo-1633091096498-5eb8cfa43e43?w=800&q=80"
                   alt="Handcrafted slime being made"
                   fill
                   sizes="(max-width: 768px) 100vw, 50vw"

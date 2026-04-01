@@ -78,7 +78,7 @@ export default function AboutPage() {
             <div className="relative">
               <div className="aspect-[4/5] rounded-[3rem] overflow-hidden shadow-2xl">
                 <Image
-                  src="https://images.pexels.com/photos/6144305/pexels-photo-6144305.jpeg?w=800"
+                  src="https://images.pexels.com/photos/1449934/pexels-photo-1449934.jpeg?auto=compress&cs=tinysrgb&w=800"
                   alt="Handcrafting slime at RJ Slime Factory"
                   fill
                   sizes="(max-width: 768px) 100vw, 50vw"
