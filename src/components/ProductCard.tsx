@@ -12,13 +12,21 @@ export default function ProductCard({ product }: { product: Product }) {
     <div className="group card-hover bg-white rounded-3xl overflow-hidden shadow-md">
       {/* Image */}
       <div className="product-image-wrapper">
-        <div className={`absolute inset-0 bg-gradient-to-br ${product.gradient} opacity-30`} />
         <Image
           src={product.image}
           alt={product.name}
           fill
           sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
           className="object-cover group-hover:scale-110 transition-transform duration-500"
+        />
+        {/* Color tint overlay - shows accurate product color */}
+        <div
+          className="absolute inset-0 opacity-45 mix-blend-color"
+          style={{ backgroundColor: product.tintColor }}
+        />
+        <div
+          className="absolute inset-0 opacity-20 mix-blend-overlay"
+          style={{ backgroundColor: product.tintColor }}
         />
         {/* Badge */}
         {product.badge && (

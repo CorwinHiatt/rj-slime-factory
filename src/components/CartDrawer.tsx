@@ -67,15 +67,16 @@ export default function CartDrawer() {
                 >
                   {/* Product Image */}
                   <div className="relative w-20 h-20 rounded-xl overflow-hidden flex-shrink-0">
-                    <div
-                      className={`absolute inset-0 bg-gradient-to-br ${item.product.gradient} opacity-30`}
-                    />
                     <Image
                       src={item.product.image}
                       alt={item.product.name}
                       fill
                       sizes="80px"
                       className="object-cover"
+                    />
+                    <div
+                      className="absolute inset-0 opacity-45 mix-blend-color"
+                      style={{ backgroundColor: item.product.tintColor }}
                     />
                   </div>
 

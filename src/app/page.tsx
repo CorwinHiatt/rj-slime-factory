@@ -50,7 +50,7 @@ const testimonials = [
 export default function HomePage() {
   return (
     <>
-      {/* Hero Section */}
+      {/* Hero Section - Meet RJ */}
       <section className="relative overflow-hidden bg-gradient-to-br from-slime-cream via-white to-purple-50">
         {/* Decorative blobs */}
         <div className="absolute top-20 left-10 w-72 h-72 bg-slime-pink/20 rounded-full blur-3xl animate-blob" />
@@ -59,18 +59,43 @@ export default function HomePage() {
 
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 sm:py-28 lg:py-36">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
+            {/* RJ Hero Image */}
+            <div className="relative animate-float order-2 lg:order-1">
+              <div className="relative aspect-[3/4] max-w-md mx-auto">
+                <div className="absolute inset-0 bg-gradient-to-br from-slime-pink/30 via-slime-purple/30 to-slime-teal/30 rounded-[3rem] rotate-3" />
+                <div className="absolute inset-0 rounded-[3rem] overflow-hidden shadow-2xl">
+                  <Image
+                    src="/rj-founder.png"
+                    alt="River Jordan Hiatt - Founder of RJ Slime Factory"
+                    fill
+                    sizes="(max-width: 768px) 100vw, 50vw"
+                    className="object-cover object-top"
+                    priority
+                  />
+                </div>
+                <div className="absolute -bottom-4 -right-4 bg-white rounded-2xl shadow-xl px-5 py-3">
+                  <p className="font-display font-bold text-slime-purple text-sm">The Brain Behind the Slime</p>
+                </div>
+              </div>
+            </div>
+
             {/* Text */}
-            <div className="animate-slide-up">
+            <div className="animate-slide-up order-1 lg:order-2">
               <span className="inline-block px-4 py-1.5 bg-slime-pink/10 text-slime-pink font-display font-semibold text-sm rounded-full mb-6">
-                New Drop Every Friday
+                Meet the Founder
               </span>
               <h1 className="font-display text-5xl sm:text-6xl lg:text-7xl font-bold leading-tight mb-6">
-                Slime That{' '}
-                <span className="gradient-text">Satisfies</span>{' '}
-                Your Soul
+                Meet{' '}
+                <span className="gradient-text">RJ</span>
               </h1>
+              <h2 className="font-display text-2xl sm:text-3xl font-semibold text-gray-700 mb-6">
+                River Jordan Hiatt
+              </h2>
+              <p className="text-lg text-gray-600 max-w-lg mb-4 leading-relaxed">
+                The brain behind RJ Slime Factory. River Jordan has been fueling his passion for the slime industry for over half of his life. His expertise is in slime testing, and he recently dove into slime creation.
+              </p>
               <p className="text-lg text-gray-600 max-w-lg mb-8 leading-relaxed">
-                Premium handcrafted slime with satisfying textures, irresistible scents, and ASMR-worthy sounds. Made fresh, shipped fast.
+                RJ loves to make people smile, and he&apos;s recently decided to take the leap into making people smile one slime at a time with RJ Slime Factory.
               </p>
               <div className="flex flex-wrap gap-4">
                 <Link href="/shop" className="btn-primary">
@@ -97,24 +122,7 @@ export default function HomePage() {
                       <Star key={i} size={14} className="fill-yellow-400 text-yellow-400" />
                     ))}
                   </div>
-                  <p className="text-sm text-gray-500">2,500+ happy customers</p>
-                </div>
-              </div>
-            </div>
-
-            {/* Hero Image */}
-            <div className="relative animate-float">
-              <div className="relative aspect-square max-w-lg mx-auto">
-                <div className="absolute inset-0 bg-gradient-to-br from-slime-pink/30 via-slime-purple/30 to-slime-teal/30 rounded-[3rem] rotate-6" />
-                <div className="absolute inset-0 rounded-[3rem] overflow-hidden shadow-2xl">
-                  <Image
-                    src="https://images.unsplash.com/photo-1558591710-4b4a1ae0f04d?w=800&q=80"
-                    alt="Colorful handcrafted slime collection"
-                    fill
-                    sizes="(max-width: 768px) 100vw, 50vw"
-                    className="object-cover"
-                    priority
-                  />
+                  <p className="text-sm text-gray-500">Making people smile, one slime at a time</p>
                 </div>
               </div>
             </div>
@@ -210,14 +218,14 @@ export default function HomePage() {
                 Why RJ Slime Factory?
               </h2>
               <p className="text-gray-300 text-lg leading-relaxed mb-6">
-                We&apos;re not just another slime shop. Every batch is handcrafted with premium ingredients, tested for the perfect texture, and scented with custom fragrance blends you won&apos;t find anywhere else.
+                RJ Slime Factory isn&apos;t just another slime shop &mdash; it&apos;s built by someone who lives and breathes slime. With years of hands-on slime testing expertise, RJ crafts every batch with premium ingredients, perfect textures, and custom scent blends you won&apos;t find anywhere else.
               </p>
               <ul className="space-y-3 mb-8">
                 {[
                   'Premium, non-toxic ingredients',
-                  'Unique scents crafted in-house',
-                  'Perfect texture guaranteed',
-                  'Eco-friendly packaging',
+                  'Expert-tested textures by RJ himself',
+                  'Custom scents crafted in-house',
+                  'Made to make you smile',
                 ].map((item) => (
                   <li key={item} className="flex items-center gap-3">
                     <span className="w-6 h-6 rounded-full bg-slime-teal/20 flex items-center justify-center flex-shrink-0">
@@ -235,8 +243,8 @@ export default function HomePage() {
             <div className="relative">
               <div className="aspect-square rounded-[3rem] overflow-hidden shadow-2xl">
                 <Image
-                  src="https://images.unsplash.com/photo-1614849286521-4c58b2f0ff15?w=800&q=80"
-                  alt="Handcrafted slime being made"
+                  src="https://images.pexels.com/photos/6144294/pexels-photo-6144294.jpeg?auto=compress&cs=tinysrgb&w=800"
+                  alt="Handcrafted slime being stretched"
                   fill
                   sizes="(max-width: 768px) 100vw, 50vw"
                   className="object-cover"

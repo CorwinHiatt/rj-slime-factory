@@ -18,6 +18,7 @@ export interface Product {
   scent: string;
   texture: string;
   image: string;
+  tintColor: string;
   gradient: string;
   badge?: string;
   inStock: boolean;
@@ -34,6 +35,8 @@ export const categories: { id: SlimeCategory; name: string; color: string }[] = 
   { id: 'glitter', name: 'Glitter Slime', color: '#FF6B9D' },
 ];
 
+// All images are verified real slime/dough photos from Pexels (cottonbro studio series)
+// tintColor is applied as an overlay to show accurate product color
 export const products: Product[] = [
   {
     id: 'cotton-candy-cloud',
@@ -43,7 +46,8 @@ export const products: Product[] = [
     description: 'Dreamy, drizzly cloud slime with an airy cotton candy texture. Stretches into satisfying wisps.',
     scent: 'Cotton Candy',
     texture: 'Drizzly & Airy',
-    image: 'https://images.unsplash.com/photo-1557672172-298e090bd0f1?w=600&q=80',
+    image: 'https://images.pexels.com/photos/6144294/pexels-photo-6144294.jpeg?auto=compress&cs=tinysrgb&w=600',
+    tintColor: '#C4B5FD',
     gradient: 'from-purple-300 via-pink-200 to-blue-200',
     badge: 'Bestseller',
     inStock: true,
@@ -56,7 +60,8 @@ export const products: Product[] = [
     description: 'Deep purple glitter slime with holographic star confetti. Mesmerizing sparkle with every stretch.',
     scent: 'Blackberry Vanilla',
     texture: 'Glossy & Sparkly',
-    image: 'https://images.unsplash.com/photo-1614519679773-4ea6ddf17420?w=600&q=80',
+    image: 'https://images.pexels.com/photos/6144289/pexels-photo-6144289.jpeg?auto=compress&cs=tinysrgb&w=600',
+    tintColor: '#6D28D9',
     gradient: 'from-purple-600 via-indigo-500 to-blue-900',
     badge: 'New',
     inStock: true,
@@ -69,7 +74,8 @@ export const products: Product[] = [
     description: 'Ultra-smooth butter slime that spreads like frosting. Creamy, pillowy, and oh-so-satisfying.',
     scent: 'Fresh Strawberry',
     texture: 'Smooth & Spreadable',
-    image: 'https://images.pexels.com/photos/6144294/pexels-photo-6144294.jpeg?auto=compress&cs=tinysrgb&w=600',
+    image: 'https://images.pexels.com/photos/6144305/pexels-photo-6144305.jpeg?auto=compress&cs=tinysrgb&w=600',
+    tintColor: '#FB7185',
     gradient: 'from-pink-400 via-red-300 to-pink-200',
     inStock: true,
   },
@@ -81,7 +87,8 @@ export const products: Product[] = [
     description: 'Crystal-clear slime with tiny blue beads that look like ocean bubbles. Incredibly stretchy.',
     scent: 'Sea Salt & Coconut',
     texture: 'Crystal Clear & Stretchy',
-    image: 'https://images.unsplash.com/photo-1550684376-efcbd6e3f031?w=600&q=80',
+    image: 'https://images.pexels.com/photos/6144307/pexels-photo-6144307.jpeg?auto=compress&cs=tinysrgb&w=600',
+    tintColor: '#22D3EE',
     gradient: 'from-cyan-300 via-blue-400 to-teal-300',
     inStock: true,
   },
@@ -93,7 +100,8 @@ export const products: Product[] = [
     description: 'Rainbow bingsu beads in a glossy base. Every squeeze produces the most satisfying crunch sounds.',
     scent: 'Birthday Cake',
     texture: 'Crunchy & Crispy',
-    image: 'https://images.unsplash.com/photo-1628388477065-61b36f659e5f?w=600&q=80',
+    image: 'https://images.pexels.com/photos/6144293/pexels-photo-6144293.jpeg?auto=compress&cs=tinysrgb&w=600',
+    tintColor: '#F472B6',
     gradient: 'from-pink-400 via-yellow-300 to-purple-400',
     badge: 'Popular',
     inStock: true,
@@ -106,8 +114,9 @@ export const products: Product[] = [
     description: 'Light-as-air fluffy slime with real dried lavender pieces. Calming, soft, and cloud-like.',
     scent: 'French Lavender',
     texture: 'Fluffy & Soft',
-    image: 'https://images.unsplash.com/photo-1614519679737-29d13b299b9a?w=600&q=80',
-    gradient: 'from-purple-300 via-lavender-200 to-purple-100',
+    image: 'https://images.pexels.com/photos/6144311/pexels-photo-6144311.jpeg?auto=compress&cs=tinysrgb&w=600',
+    tintColor: '#A78BFA',
+    gradient: 'from-purple-300 via-purple-200 to-purple-100',
     inStock: true,
   },
   {
@@ -118,7 +127,8 @@ export const products: Product[] = [
     description: 'Bouncy jelly slime with a gorgeous orange-to-pink gradient. Jiggly, squishy, and inflatable.',
     scent: 'Mango Pineapple',
     texture: 'Bouncy & Jiggly',
-    image: 'https://images.unsplash.com/photo-1605106702842-01a887a31122?w=600&q=80',
+    image: 'https://images.pexels.com/photos/6144288/pexels-photo-6144288.jpeg?auto=compress&cs=tinysrgb&w=600',
+    tintColor: '#FB923C',
     gradient: 'from-orange-400 via-pink-400 to-red-400',
     inStock: true,
   },
@@ -130,7 +140,8 @@ export const products: Product[] = [
     description: 'Rich chocolate-brown butter slime swirled with mint green. Smells like a gourmet dessert.',
     scent: 'Mint Chocolate Chip',
     texture: 'Creamy & Thick',
-    image: 'https://images.unsplash.com/photo-1758843425923-9cad18eb2b7a?w=600&q=80',
+    image: 'https://images.pexels.com/photos/6144309/pexels-photo-6144309.jpeg?auto=compress&cs=tinysrgb&w=600',
+    tintColor: '#34D399',
     gradient: 'from-green-400 via-emerald-600 to-amber-800',
     badge: 'Limited',
     inStock: true,
@@ -143,7 +154,8 @@ export const products: Product[] = [
     description: 'Foam beads in every color of the rainbow. Crunchy, squishy, and endlessly playable.',
     scent: 'Fruit Punch',
     texture: 'Foamy & Crunchy',
-    image: 'https://images.unsplash.com/photo-1758843417734-f4710410e185?w=600&q=80',
+    image: 'https://images.pexels.com/photos/6144306/pexels-photo-6144306.jpeg?auto=compress&cs=tinysrgb&w=600',
+    tintColor: '#F59E0B',
     gradient: 'from-red-400 via-yellow-400 to-green-400',
     inStock: true,
   },
@@ -155,8 +167,9 @@ export const products: Product[] = [
     description: 'Soft peach-colored cloud slime that drizzles like honey. Melt-in-your-hands texture.',
     scent: 'Georgia Peach',
     texture: 'Drizzly & Smooth',
-    image: 'https://images.unsplash.com/photo-1501791187590-9ef2612ba1eb?w=600&q=80',
-    gradient: 'from-orange-200 via-peach-300 to-pink-200',
+    image: 'https://images.pexels.com/photos/6144308/pexels-photo-6144308.jpeg?auto=compress&cs=tinysrgb&w=600',
+    tintColor: '#FDBA74',
+    gradient: 'from-orange-200 via-orange-300 to-pink-200',
     inStock: true,
   },
   {
@@ -167,7 +180,8 @@ export const products: Product[] = [
     description: 'Deep berry-colored slime packed with crunchy foam beads. ASMR heaven in a jar.',
     scent: 'Mixed Berry',
     texture: 'Crunchy & Thick',
-    image: 'https://images.pexels.com/photos/13157004/pexels-photo-13157004.jpeg?auto=compress&cs=tinysrgb&w=600',
+    image: 'https://images.pexels.com/photos/6144310/pexels-photo-6144310.jpeg?auto=compress&cs=tinysrgb&w=600',
+    tintColor: '#DB2777',
     gradient: 'from-purple-500 via-pink-500 to-red-500',
     inStock: true,
   },
@@ -179,7 +193,8 @@ export const products: Product[] = [
     description: 'Sunny yellow clear slime with tiny lemon charm add-ins. Transparent, stretchy, and bright.',
     scent: 'Lemon Zest',
     texture: 'Clear & Glossy',
-    image: 'https://images.pexels.com/photos/954599/pexels-photo-954599.jpeg?auto=compress&cs=tinysrgb&w=600',
+    image: 'https://images.pexels.com/photos/6144312/pexels-photo-6144312.jpeg?auto=compress&cs=tinysrgb&w=600',
+    tintColor: '#FACC15',
     gradient: 'from-yellow-300 via-yellow-400 to-amber-300',
     inStock: true,
   },

@@ -63,26 +63,28 @@ export default function AboutPage() {
                 Our Story
               </span>
               <h1 className="font-display text-5xl sm:text-6xl font-bold mb-6 leading-tight">
-                Made with{' '}
-                <span className="gradient-text">Heart</span>,{' '}
-                Played with Joy
+                Meet{' '}
+                <span className="gradient-text">RJ</span>
               </h1>
+              <h2 className="font-display text-2xl font-semibold text-gray-700 mb-6">
+                River Jordan Hiatt &mdash; Founder &amp; Chief Slime Scientist
+              </h2>
               <p className="text-lg text-gray-600 leading-relaxed mb-6">
-                RJ Slime Factory started with a simple idea: make the most satisfying slime on the planet. What began as a kitchen experiment quickly became a passion, and that passion became a business.
+                River Jordan Hiatt is the brain behind RJ Slime Factory. He&apos;s been fueling his passion for the slime industry for over half of his life. With deep expertise in slime testing, RJ knows exactly what makes a slime satisfying &mdash; the perfect stretch, the right texture, the ideal sound.
               </p>
               <p className="text-lg text-gray-600 leading-relaxed">
-                Today, we handcraft every single batch with premium ingredients, custom scents, and textures that are pure ASMR magic. We&apos;re not the biggest slime shop, but we&apos;re working to be the best.
+                Recently, RJ dove into slime creation and discovered something amazing: he could make people smile one slime at a time. That&apos;s when RJ Slime Factory was born. Every batch is handcrafted with love, tested by RJ himself, and made to bring joy to your hands.
               </p>
             </div>
 
             <div className="relative">
-              <div className="aspect-[4/5] rounded-[3rem] overflow-hidden shadow-2xl">
+              <div className="aspect-[3/4] rounded-[3rem] overflow-hidden shadow-2xl">
                 <Image
-                  src="https://images.pexels.com/photos/1449934/pexels-photo-1449934.jpeg?auto=compress&cs=tinysrgb&w=800"
-                  alt="Handcrafting slime at RJ Slime Factory"
+                  src="/rj-founder.png"
+                  alt="River Jordan Hiatt - Founder of RJ Slime Factory"
                   fill
                   sizes="(max-width: 768px) 100vw, 50vw"
-                  className="object-cover"
+                  className="object-cover object-top"
                   priority
                 />
               </div>
