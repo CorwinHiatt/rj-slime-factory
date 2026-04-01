@@ -1,12 +1,19 @@
 'use client';
 
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 import { X, Plus, Minus, Trash2, ShoppingBag } from 'lucide-react';
 import { useCart } from '@/context/CartContext';
 
 export default function CartDrawer() {
+  const router = useRouter();
   const { items, isOpen, closeCart, updateQuantity, removeItem, subtotal, totalItems } =
     useCart();
+
+  const handleCheckout = () => {
+    closeCart();
+    router.push('/checkout');
+  };
 
   return (
     <>
@@ -165,7 +172,7 @@ export default function CartDrawer() {
               </span>
             </div>
 
-            <button className="btn-primary w-full text-center">
+            <button onClick={handleCheckout} className="btn-primary w-full text-center">
               Checkout - ${subtotal.toFixed(2)}
             </button>
 
