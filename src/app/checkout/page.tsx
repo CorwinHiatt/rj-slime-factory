@@ -2,8 +2,8 @@ import type { Metadata } from 'next';
 import CheckoutForm from '@/components/CheckoutForm';
 
 export const metadata: Metadata = {
-  title: 'Checkout',
-  description: 'Complete your RJ Slime Factory order. Secure checkout with fast shipping from Bend, Oregon.',
+  title: 'Reserve Your Spot',
+  description: 'Join the RJ Slime Factory waitlist. Reserve your handcrafted slime — your card won\'t be charged until we officially launch and ship.',
   robots: { index: false, follow: false },
 };
 

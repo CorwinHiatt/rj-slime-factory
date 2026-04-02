@@ -52,24 +52,24 @@ const values = [
 
 const timeline = [
   {
-    year: '2023',
-    title: 'The First Batch',
-    description: 'Started making slime as a hobby in the kitchen. Friends and family couldn\'t get enough.',
+    year: '2020',
+    title: 'The Slime Obsession Begins',
+    description: 'RJ discovers slime and quickly becomes the go-to slime expert among friends and family. Testing every texture, every brand.',
   },
   {
     year: '2024',
-    title: 'Going Online',
-    description: 'Launched our first online shop. Sold out our first drop in under 30 minutes.',
+    title: 'From Tester to Creator',
+    description: 'After years of testing, RJ starts creating his own recipes. Friends are blown away by the quality.',
   },
   {
     year: '2025',
-    title: 'Growing Community',
-    description: 'Built an amazing community of slime lovers. Expanded to 20+ unique textures.',
+    title: 'RJ Slime Factory Is Born',
+    description: 'The idea becomes real. RJ begins perfecting his signature line of handcrafted slimes in Bend, Oregon.',
   },
   {
     year: '2026',
-    title: 'The Factory',
-    description: 'Moved into our dedicated slime studio. More drops, more textures, more fun.',
+    title: 'Launching Soon',
+    description: 'The waitlist is open. RJ is finalizing recipes and preparing for the first official drop. Join the list to be first in line.',
   },
 ];
 
@@ -95,23 +95,35 @@ export default function AboutPage() {
                 River Jordan Hiatt &mdash; Founder &amp; Chief Slime Scientist
               </h2>
               <p className="text-lg text-gray-600 leading-relaxed mb-6">
-                River Jordan Hiatt is the brain behind RJ Slime Factory. He&apos;s been fueling his passion for the slime industry for over half of his life. With deep expertise in slime testing, RJ knows exactly what makes a slime satisfying &mdash; the perfect stretch, the right texture, the ideal sound.
+                River Jordan Hiatt is the brain behind RJ Slime Factory. A lifelong slime enthusiast, RJ has spent years testing every texture on the market. He knows exactly what makes a slime satisfying &mdash; the perfect stretch, the right texture, the ideal sound.
               </p>
               <p className="text-lg text-gray-600 leading-relaxed">
-                Recently, RJ dove into slime creation and discovered something amazing: he could make people smile one slime at a time. That&apos;s when RJ Slime Factory was born. Every batch is handcrafted with love, tested by RJ himself, and made to bring joy to your hands.
+                Now RJ is channeling that expertise into creating his own line of premium slimes. Every batch is handcrafted with love, tested by RJ himself, and made to bring joy to your hands. RJ Slime Factory is gearing up for launch &mdash; join the waitlist to be first in line.
               </p>
             </div>
 
-            <div className="relative">
-              <div className="aspect-[3/4] rounded-[3rem] overflow-hidden shadow-2xl">
+            <div className="relative max-w-[400px] mx-auto">
+              {/* Animated gradient glow */}
+              <div className="absolute -inset-4 rounded-[3rem] bg-gradient-to-br from-slime-pink via-slime-purple to-slime-teal opacity-30 blur-xl animate-pulse" />
+              <div className="absolute -inset-2 rounded-[2.8rem] bg-gradient-to-tr from-slime-teal via-slime-purple to-slime-pink opacity-20 rotate-3" />
+
+              {/* Photo with gradient overlay */}
+              <div className="relative aspect-[3/4] rounded-[3rem] overflow-hidden shadow-2xl shadow-slime-purple/20">
+                <div className="absolute inset-0 bg-gradient-to-br from-slime-purple/90 via-indigo-600/80 to-slime-pink/70 z-10 mix-blend-color" />
+                <div className="absolute inset-0 bg-gradient-to-t from-slime-dark/60 via-transparent to-transparent z-10" />
                 <Image
-                  src="/rj-founder.png"
+                  src="/rj-portrait.jpg"
                   alt="River Jordan Hiatt - Founder of RJ Slime Factory"
                   fill
-                  sizes="(max-width: 768px) 100vw, 50vw"
+                  sizes="(max-width: 768px) 100vw, 400px"
                   className="object-cover object-top"
                   priority
                 />
+              </div>
+
+              {/* Floating sparkle */}
+              <div className="absolute -top-3 -right-3 w-12 h-12 rounded-2xl bg-gradient-to-br from-slime-pink to-slime-purple flex items-center justify-center shadow-lg shadow-slime-pink/30">
+                <Sparkles size={20} className="text-white" />
               </div>
             </div>
           </div>
@@ -236,13 +248,13 @@ export default function AboutPage() {
             Come Get Slimy With Us
           </h2>
           <p className="text-white/80 text-lg mb-8">
-            Browse our latest drops and find your new favorite texture.
+            Browse our lineup and reserve your favorites before we launch.
           </p>
           <Link
             href="/shop"
             className="inline-flex items-center px-10 py-4 bg-white text-slime-purple font-display font-bold rounded-full hover:scale-105 transition-transform shadow-xl text-lg"
           >
-            Shop Now <ArrowRight size={20} className="ml-2" />
+            Browse &amp; Reserve <ArrowRight size={20} className="ml-2" />
           </Link>
         </div>
       </section>

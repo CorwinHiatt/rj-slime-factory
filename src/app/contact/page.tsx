@@ -77,12 +77,34 @@ export default function ContactPage() {
     message: '',
   });
   const [submitted, setSubmitted] = useState(false);
+  const [sending, setSending] = useState(false);
+  const [error, setError] = useState('');
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setSubmitted(true);
-    setFormData({ name: '', email: '', subject: '', message: '' });
-    setTimeout(() => setSubmitted(false), 5000);
+    setSending(true);
+    setError('');
+
+    try {
+      const res = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData),
+      });
+
+      if (!res.ok) {
+        const data = await res.json();
+        throw new Error(data.error || 'Failed to send message.');
+      }
+
+      setSubmitted(true);
+      setFormData({ name: '', email: '', subject: '', message: '' });
+      setTimeout(() => setSubmitted(false), 5000);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Something went wrong. Please try again.');
+    } finally {
+      setSending(false);
+    }
   };
 
   return (
@@ -131,6 +153,13 @@ export default function ContactPage() {
               <div className="bg-slime-teal/10 border border-slime-teal/30 text-slime-teal rounded-2xl p-4 mb-6 animate-slide-up">
                 <p className="font-display font-semibold">Message sent!</p>
                 <p className="text-sm opacity-80">We&apos;ll get back to you within 24 hours.</p>
+              </div>
+            )}
+
+            {error && (
+              <div className="bg-red-50 border border-red-200 text-red-600 rounded-2xl p-4 mb-6 animate-slide-up">
+                <p className="font-display font-semibold">Oops!</p>
+                <p className="text-sm opacity-80">{error}</p>
               </div>
             )}
 
@@ -220,8 +249,8 @@ export default function ContactPage() {
                 />
               </div>
 
-              <button type="submit" className="btn-primary">
-                <Send size={16} className="mr-2" /> Send Message
+              <button type="submit" disabled={sending} className="btn-primary disabled:opacity-50 disabled:cursor-not-allowed">
+                <Send size={16} className="mr-2" /> {sending ? 'Sending...' : 'Send Message'}
               </button>
             </form>
           </div>

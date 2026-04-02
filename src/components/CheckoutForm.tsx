@@ -300,6 +300,7 @@ export default function CheckoutForm() {
   const [orderConfirmation, setOrderConfirmation] = useState<OrderConfirmation | null>(null);
   const [serverErrors, setServerErrors] = useState<string[]>([]);
   const [copiedOrderId, setCopiedOrderId] = useState(false);
+  const [waitlistPosition, setWaitlistPosition] = useState(0);
 
   // Express checkout
   const [showExpressLoading, setShowExpressLoading] = useState<string | null>(null);
@@ -438,10 +439,10 @@ export default function CheckoutForm() {
 
     const stages = [
       'Securing connection...',
-      'Validating order details...',
-      'Processing payment...',
-      'Confirming with bank...',
-      'Finalizing order...',
+      'Validating your details...',
+      'Verifying payment method...',
+      'Reserving your spot...',
+      'Confirming waitlist entry...',
     ];
 
     for (let i = 0; i < stages.length; i++) {
@@ -480,10 +481,6 @@ export default function CheckoutForm() {
       }
     }
 
-    const deliveryDays = shippingMethod.id === 'overnight' ? 1 : shippingMethod.id === 'express' ? 3 : 6;
-    const estimatedDelivery = new Date();
-    estimatedDelivery.setDate(estimatedDelivery.getDate() + deliveryDays);
-
     const confirmation: OrderConfirmation = {
       id: generateOrderId(),
       email: shipping.email || 'customer@example.com',
@@ -492,9 +489,7 @@ export default function CheckoutForm() {
       shippingCost,
       tax,
       itemCount: items.reduce((s, i) => s + i.quantity, 0),
-      estimatedDelivery: estimatedDelivery.toLocaleDateString('en-US', {
-        weekday: 'long', month: 'long', day: 'numeric',
-      }),
+      estimatedDelivery: 'We\'ll notify you when we launch!',
       shippingMethod: shippingMethod.name,
       shippingAddress: {
         name: `${shipping.firstName} ${shipping.lastName}`,
@@ -514,14 +509,14 @@ export default function CheckoutForm() {
       })),
     };
 
-    // Also call the API route for server-side validation
+    // Add to waitlist via API
+    let waitlistPosition = 0;
     try {
-      const res = await fetch('/api/checkout', {
+      const res = await fetch('/api/waitlist', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           shipping,
-          paymentToken: generateToken(),
           items: items.map((i) => ({
             productId: i.product.id,
             name: i.product.name,
@@ -529,23 +524,25 @@ export default function CheckoutForm() {
             quantity: i.quantity,
           })),
           subtotal,
-          shipping_cost: shippingCost,
-          tax,
           total,
+          paymentMethod: paymentMethodStr,
         }),
       });
 
       const data = await res.json();
       if (!res.ok || !data.success) {
-        setServerErrors(data.errors || ['Payment failed. Please try again.']);
+        setServerErrors(data.errors || ['Something went wrong. Please try again.']);
         goTo('payment');
         return;
       }
+      waitlistPosition = data.entry?.position || 0;
+      if (data.entry?.id) confirmation.id = data.entry.id;
     } catch {
       // Network error — still show confirmation for mock purposes
     }
 
     setOrderConfirmation(confirmation);
+    setWaitlistPosition(waitlistPosition);
     clearCart();
     goTo('confirmation');
   };
@@ -619,7 +616,7 @@ export default function CheckoutForm() {
           </div>
           <Lock size={24} className="absolute inset-0 m-auto text-slime-purple" />
         </div>
-        <h2 className="font-display text-2xl font-bold mb-2">Processing Your Order</h2>
+        <h2 className="font-display text-2xl font-bold mb-2">Reserving Your Spot</h2>
         <p className="text-gray-500 text-sm mb-8">Please don&apos;t close this page</p>
         <div className="w-full max-w-xs space-y-3">
           {stages.map((label, i) => (
@@ -658,10 +655,16 @@ export default function CheckoutForm() {
               <Check size={40} className="text-green-600" />
             </div>
           </div>
-          <h1 className="font-display text-3xl sm:text-4xl font-bold mb-2">Thank You for Your Order!</h1>
-          <p className="text-gray-500">
+          <h1 className="font-display text-3xl sm:text-4xl font-bold mb-2">You&apos;re on the Waitlist!</h1>
+          <p className="text-gray-500 mb-4">
             Confirmation sent to <span className="font-medium text-slime-dark">{orderConfirmation.email}</span>
           </p>
+          {waitlistPosition > 0 && (
+            <div className="inline-flex items-center gap-2 px-5 py-2.5 bg-slime-purple/10 rounded-full">
+              <span className="text-sm text-gray-500">Your position:</span>
+              <span className="font-display font-bold text-2xl text-slime-purple">#{waitlistPosition}</span>
+            </div>
+          )}
         </div>
 
         {/* Order ID */}
@@ -751,14 +754,14 @@ export default function CheckoutForm() {
 
         {/* Status timeline */}
         <div className="bg-gradient-to-r from-slime-teal/5 to-slime-purple/5 rounded-2xl p-5 mb-8">
-          <h3 className="font-display font-bold text-sm mb-4">Order Status</h3>
+          <h3 className="font-display font-bold text-sm mb-4">What Happens Next</h3>
           <div className="space-y-4">
             {[
-              { label: 'Order placed', time: 'Just now', done: true },
-              { label: 'Payment confirmed', time: 'Just now', done: true },
-              { label: 'Preparing your slime', time: 'In progress', done: false },
-              { label: 'Shipped', time: 'Pending', done: false },
-              { label: 'Delivered', time: orderConfirmation.estimatedDelivery, done: false },
+              { label: 'Waitlist reservation confirmed', time: 'Just now', done: true },
+              { label: 'Payment method verified (not charged)', time: 'Just now', done: true },
+              { label: 'Market study in progress', time: 'In progress', done: false },
+              { label: 'Launch announcement', time: 'Coming soon', done: false },
+              { label: 'Your order ships & card is charged', time: 'After launch', done: false },
             ].map((s, i) => (
               <div key={i} className="flex items-start gap-3">
                 <div className="flex flex-col items-center">
@@ -1032,11 +1035,17 @@ export default function CheckoutForm() {
                 </div>
               )}
 
+              {/* Waitlist notice */}
+              <div className="p-4 rounded-xl bg-amber-50 border border-amber-200 mb-6">
+                <p className="text-sm text-amber-800 font-medium mb-1">This is a waitlist reservation</p>
+                <p className="text-xs text-amber-700">Your card will be verified but <strong>not charged</strong> until we officially launch and ship your order. You can cancel anytime.</p>
+              </div>
+
               <h2 className="font-display text-lg font-bold mb-1 flex items-center gap-2">
                 <CreditCard size={18} className="text-slime-purple" />
-                Payment
+                Payment Method
               </h2>
-              <p className="text-xs text-gray-400 mb-4">All transactions are secure and encrypted.</p>
+              <p className="text-xs text-gray-400 mb-4">Secure verification — no charge until launch.</p>
 
               <form onSubmit={handlePaymentSubmit} autoComplete="on">
                 {/* Saved cards */}
@@ -1210,7 +1219,7 @@ export default function CheckoutForm() {
                   </button>
                   <button type="submit" className="btn-primary flex-1 gap-2">
                     <Lock size={16} />
-                    Pay ${total.toFixed(2)}
+                    Reserve &middot; ${total.toFixed(2)}
                   </button>
                 </div>
               </form>

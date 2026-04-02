@@ -173,11 +173,11 @@ export default function CartDrawer() {
             </div>
 
             <button onClick={handleCheckout} className="btn-primary w-full text-center">
-              Checkout - ${subtotal.toFixed(2)}
+              Reserve Now - ${subtotal.toFixed(2)}
             </button>
 
             <p className="text-xs text-gray-400 text-center">
-              Shipping & taxes calculated at checkout
+              Join the waitlist &middot; No charge until we ship
             </p>
           </div>
         )}

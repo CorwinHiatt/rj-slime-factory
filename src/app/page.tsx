@@ -2,34 +2,16 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
-import { ArrowRight, Sparkles, Truck, Heart, Star } from 'lucide-react';
+import { ArrowRight, Sparkles, Truck, Heart, Star, Clock } from 'lucide-react';
 import ProductCard from '@/components/ProductCard';
 import ScrollReveal from '@/components/ScrollReveal';
 import { featuredProducts, categories } from '@/data/products';
 
 const perks = [
-  { icon: Sparkles, title: 'Handcrafted', desc: 'Made fresh to order' },
+  { icon: Sparkles, title: 'Handcrafted', desc: 'Small batch quality' },
   { icon: Truck, title: 'Free Shipping', desc: 'On orders over $50' },
-  { icon: Heart, title: 'Made with Love', desc: 'Small batch quality' },
-  { icon: Star, title: '5-Star Rated', desc: 'Trusted by thousands' },
-];
-
-const testimonials = [
-  {
-    name: 'Sarah M.',
-    text: 'The Cotton Candy Cloud is INSANE. So satisfying and the scent is perfect!',
-    rating: 5,
-  },
-  {
-    name: 'Jessica L.',
-    text: 'Best slime shop I\'ve ever ordered from. The textures are so unique and high quality.',
-    rating: 5,
-  },
-  {
-    name: 'Emily R.',
-    text: 'My kids are obsessed! We order every single Friday drop. The scents are amazing.',
-    rating: 5,
-  },
+  { icon: Heart, title: 'Made with Love', desc: 'Premium ingredients' },
+  { icon: Clock, title: 'Coming Soon', desc: 'Join the waitlist' },
 ];
 
 export default function HomePage() {
@@ -46,20 +28,34 @@ export default function HomePage() {
           <div className="grid lg:grid-cols-2 gap-16 items-center">
             {/* RJ Hero Image */}
             <ScrollReveal direction="left" className="relative order-2 lg:order-1">
-              <div className="relative aspect-[3/4] max-w-[380px] mx-auto">
-                <div className="absolute -inset-3 bg-gradient-to-br from-slime-pink/20 via-slime-purple/15 to-slime-teal/20 rounded-[2.5rem] rotate-2 blur-sm" />
-                <div className="relative rounded-[2.5rem] overflow-hidden shadow-2xl shadow-slime-purple/10">
+              <div className="relative max-w-[400px] mx-auto">
+                {/* Animated gradient ring behind photo */}
+                <div className="absolute -inset-4 rounded-[3rem] bg-gradient-to-br from-slime-pink via-slime-purple to-slime-teal opacity-30 blur-xl animate-pulse" />
+                <div className="absolute -inset-2 rounded-[2.8rem] bg-gradient-to-tr from-slime-teal via-slime-purple to-slime-pink opacity-20 rotate-3" />
+
+                {/* Main photo container */}
+                <div className="relative aspect-[3/4] rounded-[2.5rem] overflow-hidden shadow-2xl shadow-slime-purple/20">
                   <Image
                     src="/rj-founder.png"
                     alt="River Jordan Hiatt - Founder of RJ Slime Factory"
                     fill
-                    sizes="(max-width: 768px) 100vw, 380px"
+                    sizes="(max-width: 768px) 100vw, 400px"
                     className="object-cover object-top"
                     priority
                   />
                 </div>
-                <div className="absolute -bottom-3 -right-3 bg-white rounded-2xl shadow-xl shadow-black/8 px-5 py-3 border border-gray-100">
-                  <p className="font-display font-bold text-slime-purple text-sm">The Brain Behind the Slime</p>
+
+                {/* Floating decorative elements */}
+                <div className="absolute -top-3 -right-3 w-14 h-14 rounded-2xl bg-gradient-to-br from-slime-pink to-slime-purple flex items-center justify-center shadow-lg shadow-slime-pink/30 animate-float">
+                  <Sparkles size={22} className="text-white" />
+                </div>
+                <div className="absolute top-1/4 -left-4 w-10 h-10 rounded-xl bg-gradient-to-br from-slime-teal to-emerald-400 flex items-center justify-center shadow-lg shadow-slime-teal/30 animate-float-delay">
+                  <Star size={16} className="text-white fill-white" />
+                </div>
+
+                {/* Badge */}
+                <div className="absolute -bottom-3 left-1/2 -translate-x-1/2 bg-white rounded-2xl shadow-xl shadow-black/8 px-6 py-3 border border-gray-100 whitespace-nowrap">
+                  <p className="font-display font-bold text-transparent bg-clip-text bg-gradient-to-r from-slime-pink via-slime-purple to-slime-teal text-sm">The Brain Behind the Slime</p>
                 </div>
               </div>
             </ScrollReveal>
@@ -77,38 +73,27 @@ export default function HomePage() {
                 River Jordan Hiatt
               </h2>
               <p className="text-base text-gray-500 max-w-lg mb-4 leading-relaxed">
-                The brain behind RJ Slime Factory. River Jordan has been fueling his passion for the slime industry for over half of his life. His expertise is in slime testing, and he recently dove into slime creation.
+                The brain behind RJ Slime Factory. River Jordan is a slime expert who has spent years testing every texture on the market. Now he&apos;s channeling that expertise into creating his own line of premium slimes.
               </p>
               <p className="text-base text-gray-500 max-w-lg mb-10 leading-relaxed">
-                RJ loves to make people smile, and he&apos;s recently decided to take the leap into making people smile one slime at a time with RJ Slime Factory.
+                RJ Slime Factory is gearing up for launch. Reserve your favorites now and be first in line when we ship.
               </p>
               <div className="flex flex-wrap gap-4">
                 <Link href="/shop" className="btn-primary">
-                  Shop Now <ArrowRight size={16} className="ml-2" />
+                  Browse &amp; Reserve <ArrowRight size={16} className="ml-2" />
                 </Link>
                 <Link href="/about" className="btn-secondary">
                   Our Story
                 </Link>
               </div>
 
-              {/* Social proof */}
+              {/* Waitlist CTA */}
               <div className="flex items-center gap-5 mt-12 pt-8 border-t border-gray-100">
-                <div className="flex -space-x-1.5">
-                  {[...Array(5)].map((_, i) => (
-                    <div
-                      key={i}
-                      className="w-7 h-7 rounded-full border-2 border-white bg-gradient-to-br from-slime-pink to-slime-purple"
-                    />
-                  ))}
+                <div className="flex items-center gap-2 px-4 py-2 bg-slime-teal/10 rounded-xl">
+                  <div className="w-2 h-2 rounded-full bg-slime-teal animate-pulse" />
+                  <span className="text-sm font-display font-semibold text-slime-teal">Waitlist Open</span>
                 </div>
-                <div>
-                  <div className="flex items-center gap-0.5 mb-0.5">
-                    {[...Array(5)].map((_, i) => (
-                      <Star key={i} size={12} className="fill-amber-400 text-amber-400" />
-                    ))}
-                  </div>
-                  <p className="text-xs text-gray-400">Making people smile, one slime at a time</p>
-                </div>
+                <p className="text-xs text-gray-400">Reserve your spot &mdash; no charge until we ship</p>
               </div>
             </ScrollReveal>
           </div>
@@ -141,12 +126,12 @@ export default function HomePage() {
         <div className="max-w-7xl mx-auto">
           <ScrollReveal>
             <div className="text-center mb-14">
-              <p className="text-[11px] font-medium tracking-[0.2em] uppercase text-slime-pink mb-4">Fresh this week</p>
+              <p className="text-[11px] font-medium tracking-[0.2em] uppercase text-slime-pink mb-4">Launching soon</p>
               <h2 className="font-display text-4xl sm:text-5xl font-bold mb-4">
-                Hot <span className="gradient-text">Drops</span>
+                First <span className="gradient-text">Drops</span>
               </h2>
               <p className="text-gray-400 max-w-sm mx-auto text-[15px]">
-                Limited quantities. Grab yours before they sell out.
+                Reserve your favorites. Limited first-run quantities.
               </p>
             </div>
           </ScrollReveal>
@@ -233,49 +218,22 @@ export default function HomePage() {
             </ScrollReveal>
 
             <ScrollReveal direction="right" delay={150}>
-              <div className="relative aspect-square max-w-md mx-auto">
+              <div className="relative aspect-[3/4] max-w-sm mx-auto">
                 <div className="absolute -inset-2 bg-gradient-to-br from-slime-pink/10 to-slime-teal/10 rounded-[2.5rem] rotate-1" />
-                <div className="relative rounded-[2.5rem] overflow-hidden shadow-2xl">
+                <div className="relative rounded-[2.5rem] overflow-hidden shadow-2xl h-full">
                   <Image
-                    src="https://images.pexels.com/photos/6144294/pexels-photo-6144294.jpeg?auto=compress&cs=tinysrgb&w=800"
-                    alt="Handcrafted slime being stretched"
+                    src="/rj-portrait.jpg"
+                    alt="River Jordan Hiatt — Founder of RJ Slime Factory"
                     fill
-                    sizes="(max-width: 768px) 100vw, 50vw"
-                    className="object-cover"
+                    sizes="(max-width: 768px) 100vw, 380px"
+                    className="object-cover object-top"
                   />
+                </div>
+                <div className="absolute -bottom-3 -left-3 bg-white rounded-2xl shadow-xl shadow-black/8 px-4 py-2.5 border border-gray-100">
+                  <p className="font-display font-bold text-slime-teal text-xs">Bend, Oregon</p>
                 </div>
               </div>
             </ScrollReveal>
-          </div>
-        </div>
-      </section>
-
-      {/* Testimonials */}
-      <section className="section-padding">
-        <div className="max-w-7xl mx-auto">
-          <ScrollReveal>
-            <div className="text-center mb-14">
-              <p className="text-[11px] font-medium tracking-[0.2em] uppercase text-slime-pink mb-4">Reviews</p>
-              <h2 className="font-display text-4xl sm:text-5xl font-bold">
-                What Our <span className="gradient-text">Slimers</span> Say
-              </h2>
-            </div>
-          </ScrollReveal>
-
-          <div className="grid md:grid-cols-3 gap-5">
-            {testimonials.map((t, i) => (
-              <ScrollReveal key={t.name} delay={i * 100} direction="up">
-                <div className="bg-white p-7 rounded-2xl border border-gray-100 hover:border-gray-200 hover:shadow-lg hover:shadow-black/5 transition-all duration-500">
-                  <div className="flex items-center gap-0.5 mb-5">
-                    {[...Array(t.rating)].map((_, j) => (
-                      <Star key={j} size={14} className="fill-amber-400 text-amber-400" />
-                    ))}
-                  </div>
-                  <p className="text-gray-600 text-sm mb-5 leading-relaxed">&ldquo;{t.text}&rdquo;</p>
-                  <p className="font-display font-semibold text-sm text-slime-dark">{t.name}</p>
-                </div>
-              </ScrollReveal>
-            ))}
           </div>
         </div>
       </section>
@@ -288,14 +246,14 @@ export default function HomePage() {
             Ready to Get Slimy?
           </h2>
           <p className="text-gray-400 text-base mb-10">
-            Join thousands of happy customers. Shop our latest collection today.
+            We&apos;re gearing up for launch. Reserve your slimes now and be first to get them.
           </p>
           <Link
             href="/shop"
             className="inline-flex items-center px-10 py-4 bg-white text-slime-dark font-display font-bold rounded-full
               transition-all duration-500 ease-out shadow-xl shadow-white/10 hover:-translate-y-0.5 hover:shadow-2xl hover:shadow-white/20 text-[15px]"
           >
-            Shop Now <ArrowRight size={16} className="ml-2" />
+            Join the Waitlist <ArrowRight size={16} className="ml-2" />
           </Link>
         </ScrollReveal>
       </section>
