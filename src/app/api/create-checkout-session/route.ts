@@ -37,7 +37,6 @@ const VALID_SHIPPING: Record<string, number> = {
 
 export async function POST(request: Request) {
   try {
-    // Check Stripe is configured
     const stripe = getStripeServer();
     if (!stripe) {
       return NextResponse.json(
@@ -71,16 +70,14 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Price mismatch. Please refresh and try again.' }, { status: 400 });
     }
 
-    // Build line items for Stripe
+    // Build line items for Stripe (no images to avoid URL issues)
     const lineItems = items.map((item) => ({
       price_data: {
         currency: 'usd',
         product_data: {
           name: item.name,
-          description: 'Pre-order — ships when we hit 50 orders',
-          ...(item.image ? { images: [`${process.env.NEXT_PUBLIC_SITE_URL || 'https://rjslime.xyz'}${item.image}`] } : {}),
         },
-        unit_amount: Math.round(item.price * 100), // Stripe uses cents
+        unit_amount: Math.round(item.price * 100),
       },
       quantity: item.quantity,
     }));
@@ -92,7 +89,6 @@ export async function POST(request: Request) {
           currency: 'usd',
           product_data: {
             name: `Shipping (${shippingMethodId.charAt(0).toUpperCase() + shippingMethodId.slice(1)})`,
-            description: 'Shipping cost',
           },
           unit_amount: Math.round(shippingCost * 100),
         },
@@ -105,11 +101,9 @@ export async function POST(request: Request) {
     // Create Stripe Checkout Session
     const session = await stripe.checkout.sessions.create({
       mode: 'payment',
-      payment_method_types: ['card'],
       customer_email: shipping.email,
       line_items: lineItems,
       metadata: {
-        // Store shipping info for webhook processing
         shipping_name: `${shipping.firstName} ${shipping.lastName}`,
         shipping_phone: shipping.phone || '',
         shipping_address: shipping.address,
@@ -131,10 +125,11 @@ export async function POST(request: Request) {
     });
 
     return NextResponse.json({ sessionId: session.id, url: session.url });
-  } catch (err) {
-    console.error('Stripe Checkout Session error:', err);
+  } catch (err: unknown) {
+    const message = err instanceof Error ? err.message : 'Unknown error';
+    console.error('Stripe Checkout Session error:', message);
     return NextResponse.json(
-      { error: 'Failed to create checkout session. Please try again.' },
+      { error: `Payment error: ${message}` },
       { status: 500 }
     );
   }
