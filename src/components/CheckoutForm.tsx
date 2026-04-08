@@ -57,7 +57,7 @@ type CheckoutStep = 'information' | 'shipping' | 'review';
    ================================================================ */
 
 const SAVED_SHIPPING_KEY = 'rj-slime-saved-shipping';
-const FREE_SHIPPING_THRESHOLD = 1;
+const FREE_SHIPPING_THRESHOLD = 50;
 const TAX_RATE = 0.0; // Oregon — no sales tax
 
 const SHIPPING_METHODS: ShippingMethod[] = [
@@ -65,7 +65,7 @@ const SHIPPING_METHODS: ShippingMethod[] = [
     id: 'standard',
     name: 'Standard Shipping',
     description: 'USPS Priority Mail',
-    price: 5.99,
+    price: 8.99,
     estimatedDays: '5–7 business days',
     icon: Package,
   },
@@ -73,7 +73,7 @@ const SHIPPING_METHODS: ShippingMethod[] = [
     id: 'express',
     name: 'Express Shipping',
     description: 'USPS Express Mail',
-    price: 12.99,
+    price: 18.99,
     estimatedDays: '2–3 business days',
     icon: Zap,
   },
@@ -81,7 +81,7 @@ const SHIPPING_METHODS: ShippingMethod[] = [
     id: 'overnight',
     name: 'Overnight Shipping',
     description: 'FedEx Overnight',
-    price: 24.99,
+    price: 34.99,
     estimatedDays: 'Next business day',
     icon: Clock,
   },

@@ -30,9 +30,9 @@ interface CheckoutSessionRequest {
 }
 
 const VALID_SHIPPING: Record<string, number> = {
-  standard: 5.99,
-  express: 12.99,
-  overnight: 24.99,
+  standard: 8.99,
+  express: 18.99,
+  overnight: 34.99,
 };
 
 export async function POST(request: Request) {
@@ -101,6 +101,7 @@ export async function POST(request: Request) {
     // Create Stripe Checkout Session
     const session = await stripe.checkout.sessions.create({
       mode: 'payment',
+      payment_method_types: ['card'],
       customer_email: shipping.email,
       line_items: lineItems,
       metadata: {
