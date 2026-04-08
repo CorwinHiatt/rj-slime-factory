@@ -4,6 +4,7 @@ import { useState, useMemo, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { SlidersHorizontal } from 'lucide-react';
 import ProductCard from '@/components/ProductCard';
+import PreOrderProgress from '@/components/PreOrderProgress';
 import { products, categories, type SlimeCategory } from '@/data/products';
 
 type SortOption = 'featured' | 'price-low' | 'price-high' | 'name';
@@ -54,10 +55,10 @@ function ShopContent() {
       <section className="bg-gradient-to-br from-slime-cream via-white to-purple-50 section-padding pb-8">
         <div className="max-w-7xl mx-auto text-center">
           <h1 className="font-display text-5xl sm:text-6xl font-bold mb-4">
-            Shop <span className="gradient-text">All Slimes</span>
+            Pre-Order <span className="gradient-text">Your Slimes</span>
           </h1>
           <p className="text-gray-500 max-w-lg mx-auto text-lg">
-            Browse our full collection. Every slime is handcrafted, scented, and ready to ship.
+            Browse our full collection and pre-order your favorites. Once we hit 50 orders, production begins and your slime ships with an exclusive founder&apos;s gift.
           </p>
         </div>
       </section>
@@ -137,6 +138,13 @@ function ShopContent() {
             </button>
           </div>
         )}
+      </section>
+
+      {/* Pre-Order Progress */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-8">
+        <div className="max-w-lg mx-auto">
+          <PreOrderProgress />
+        </div>
       </section>
 
       {/* Slime Care Banner */}

@@ -2,8 +2,8 @@ import type { Metadata } from 'next';
 import CheckoutForm from '@/components/CheckoutForm';
 
 export const metadata: Metadata = {
-  title: 'Reserve Your Spot',
-  description: 'Join the RJ Slime Factory waitlist. Reserve your handcrafted slime — your card won\'t be charged until we officially launch and ship.',
+  title: 'Pre-Order Checkout',
+  description: 'Complete your RJ Slime Factory pre-order. Your order helps fund our first production run — shipping begins once we hit 50 orders. Every pre-order includes an exclusive founder\'s gift.',
   robots: { index: false, follow: false },
 };
 

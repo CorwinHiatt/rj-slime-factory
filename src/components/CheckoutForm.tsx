@@ -13,21 +13,14 @@ import {
   Check,
   ShieldCheck,
   Package,
-  MapPin,
   AlertCircle,
   Loader2,
   ShoppingBag,
   ChevronRight,
-  X,
-  Wallet,
-  Smartphone,
   Mail,
-  Printer,
-  Copy,
-  CheckCircle2,
   Zap,
   Clock,
-  Star,
+  Gift,
 } from 'lucide-react';
 import { useCart } from '@/context/CartContext';
 
@@ -48,23 +41,6 @@ interface ShippingData {
   country: string;
 }
 
-interface PaymentData {
-  cardNumber: string;
-  cardName: string;
-  expiry: string;
-  cvv: string;
-  saveCard: boolean;
-}
-
-interface SavedCard {
-  id: string;
-  brand: string;
-  last4: string;
-  name: string;
-  expiry: string;
-  token: string;
-}
-
 interface ShippingMethod {
   id: string;
   name: string;
@@ -74,35 +50,12 @@ interface ShippingMethod {
   icon: typeof Truck;
 }
 
-interface OrderConfirmation {
-  id: string;
-  email: string;
-  total: number;
-  subtotal: number;
-  shippingCost: number;
-  tax: number;
-  itemCount: number;
-  estimatedDelivery: string;
-  shippingMethod: string;
-  shippingAddress: {
-    name: string;
-    address: string;
-    apartment: string;
-    city: string;
-    state: string;
-    zip: string;
-  };
-  paymentMethod: string;
-  items: { name: string; quantity: number; price: number; image: string; tintColor: string }[];
-}
-
-type CheckoutStep = 'information' | 'shipping' | 'payment' | 'processing' | 'confirmation';
+type CheckoutStep = 'information' | 'shipping' | 'review';
 
 /* ================================================================
    CONSTANTS
    ================================================================ */
 
-const SAVED_CARDS_KEY = 'rj-slime-saved-cards';
 const SAVED_SHIPPING_KEY = 'rj-slime-saved-shipping';
 const FREE_SHIPPING_THRESHOLD = 50;
 const TAX_RATE = 0.0; // Oregon — no sales tax
@@ -167,23 +120,12 @@ const US_STATES = [
 const STEPS: { key: CheckoutStep; label: string; num: number }[] = [
   { key: 'information', label: 'Information', num: 1 },
   { key: 'shipping', label: 'Shipping', num: 2 },
-  { key: 'payment', label: 'Payment', num: 3 },
+  { key: 'review', label: 'Review & Pay', num: 3 },
 ];
 
 /* ================================================================
    UTILITIES
    ================================================================ */
-
-function formatCardNumber(value: string): string {
-  const digits = value.replace(/\D/g, '').slice(0, 16);
-  return digits.replace(/(\d{4})(?=\d)/g, '$1 ');
-}
-
-function formatExpiry(value: string): string {
-  const digits = value.replace(/\D/g, '').slice(0, 4);
-  if (digits.length >= 3) return `${digits.slice(0, 2)}/${digits.slice(2)}`;
-  return digits;
-}
 
 function formatPhone(value: string): string {
   const digits = value.replace(/\D/g, '').slice(0, 10);
@@ -193,63 +135,8 @@ function formatPhone(value: string): string {
   return '';
 }
 
-function luhnCheck(num: string): boolean {
-  const digits = num.replace(/\D/g, '');
-  if (digits.length < 13 || digits.length > 19) return false;
-  let sum = 0;
-  let even = false;
-  for (let i = digits.length - 1; i >= 0; i--) {
-    let d = parseInt(digits[i], 10);
-    if (even) { d *= 2; if (d > 9) d -= 9; }
-    sum += d;
-    even = !even;
-  }
-  return sum % 10 === 0;
-}
-
-function getCardBrand(num: string): string {
-  const d = num.replace(/\D/g, '');
-  if (/^4/.test(d)) return 'visa';
-  if (/^5[1-5]/.test(d)) return 'mastercard';
-  if (/^3[47]/.test(d)) return 'amex';
-  if (/^6(?:011|5)/.test(d)) return 'discover';
-  return '';
-}
-
-function getCardBrandLabel(brand: string): string {
-  const labels: Record<string, string> = { visa: 'Visa', mastercard: 'Mastercard', amex: 'American Express', discover: 'Discover' };
-  return labels[brand] || 'Card';
-}
-
-function getCardBrandColor(brand: string): string {
-  const colors: Record<string, string> = { visa: '#1A1F71', mastercard: '#EB001B', amex: '#006FCF', discover: '#FF6000' };
-  return colors[brand] || '#6B7280';
-}
-
 function validateEmail(email: string): boolean {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-}
-
-function generateToken(): string {
-  return `tok_${Date.now()}_${Math.random().toString(36).slice(2, 10)}`;
-}
-
-function generateOrderId(): string {
-  const ts = Date.now().toString(36).toUpperCase();
-  const r = Math.random().toString(36).substring(2, 6).toUpperCase();
-  return `RJS-${ts}-${r}`;
-}
-
-function loadSavedCards(): SavedCard[] {
-  if (typeof window === 'undefined') return [];
-  try {
-    const s = localStorage.getItem(SAVED_CARDS_KEY);
-    return s ? JSON.parse(s) : [];
-  } catch { return []; }
-}
-
-function saveSavedCards(cards: SavedCard[]) {
-  try { localStorage.setItem(SAVED_CARDS_KEY, JSON.stringify(cards)); } catch {}
 }
 
 function loadSavedShipping(): Partial<ShippingData> | null {
@@ -270,7 +157,7 @@ function saveSavedShipping(data: ShippingData) {
 
 export default function CheckoutForm() {
   const router = useRouter();
-  const { items, subtotal, clearCart, isLoaded } = useCart();
+  const { items, subtotal, isLoaded } = useCart();
   const formRef = useRef<HTMLFormElement>(null);
 
   // Steps
@@ -285,25 +172,9 @@ export default function CheckoutForm() {
   const [shippingErrors, setShippingErrors] = useState<Partial<Record<keyof ShippingData, string>>>({});
   const [selectedShippingMethod, setSelectedShippingMethod] = useState('standard');
 
-  // Payment
-  const [payment, setPayment] = useState<PaymentData>({
-    cardNumber: '', cardName: '', expiry: '', cvv: '', saveCard: true,
-  });
-  const [paymentErrors, setPaymentErrors] = useState<Partial<Record<keyof PaymentData, string>>>({});
-  const [savedCards, setSavedCards] = useState<SavedCard[]>([]);
-  const [selectedSavedCard, setSelectedSavedCard] = useState<string | null>(null);
-  const [useNewCard, setUseNewCard] = useState(false);
-  const [billingMatchesShipping, setBillingMatchesShipping] = useState(true);
-
-  // Processing & confirmation
-  const [processingStage, setProcessingStage] = useState(0);
-  const [orderConfirmation, setOrderConfirmation] = useState<OrderConfirmation | null>(null);
+  // Payment redirect
+  const [isRedirecting, setIsRedirecting] = useState(false);
   const [serverErrors, setServerErrors] = useState<string[]>([]);
-  const [copiedOrderId, setCopiedOrderId] = useState(false);
-  const [waitlistPosition, setWaitlistPosition] = useState(0);
-
-  // Express checkout
-  const [showExpressLoading, setShowExpressLoading] = useState<string | null>(null);
 
   // Calculated totals
   const shippingMethod = SHIPPING_METHODS.find((m) => m.id === selectedShippingMethod) || SHIPPING_METHODS[0];
@@ -312,28 +183,20 @@ export default function CheckoutForm() {
   const tax = subtotal * TAX_RATE;
   const total = subtotal + shippingCost + tax;
 
-  // Load saved data on mount
+  // Load saved shipping on mount
   useEffect(() => {
-    setSavedCards(loadSavedCards());
     const saved = loadSavedShipping();
     if (saved) {
       setShipping((prev) => ({ ...prev, ...saved }));
     }
   }, []);
 
-  // Auto-select first saved card
-  useEffect(() => {
-    if (savedCards.length > 0 && !selectedSavedCard && !useNewCard) {
-      setSelectedSavedCard(savedCards[0].id);
-    }
-  }, [savedCards, selectedSavedCard, useNewCard]);
-
   // Redirect if empty
   useEffect(() => {
-    if (isLoaded && items.length === 0 && step !== 'confirmation') {
+    if (isLoaded && items.length === 0) {
       router.push('/shop');
     }
-  }, [isLoaded, items.length, step, router]);
+  }, [isLoaded, items.length, router]);
 
   /* ──────────── Validation ──────────── */
 
@@ -352,28 +215,6 @@ export default function CheckoutForm() {
     setShippingErrors(errors);
     return Object.keys(errors).length === 0;
   }, [shipping]);
-
-  const validatePayment = useCallback((): boolean => {
-    if (selectedSavedCard && !useNewCard) return true;
-    const errors: Partial<Record<keyof PaymentData, string>> = {};
-    const digits = payment.cardNumber.replace(/\D/g, '');
-    if (!payment.cardName.trim()) errors.cardName = 'Name on card is required';
-    if (!digits) errors.cardNumber = 'Card number is required';
-    else if (digits.length < 13) errors.cardNumber = 'Too short';
-    else if (!luhnCheck(digits)) errors.cardNumber = 'Invalid card number';
-    if (!payment.expiry.trim()) errors.expiry = 'Required';
-    else {
-      const [mm, yy] = payment.expiry.split('/');
-      const month = parseInt(mm, 10);
-      const year = parseInt(yy, 10);
-      if (!month || month < 1 || month > 12) errors.expiry = 'Invalid';
-      else if (!year || year < 26) errors.expiry = 'Expired';
-    }
-    if (!payment.cvv.trim()) errors.cvv = 'Required';
-    else if (payment.cvv.length < 3) errors.cvv = '3-4 digits';
-    setPaymentErrors(errors);
-    return Object.keys(errors).length === 0;
-  }, [payment, selectedSavedCard, useNewCard]);
 
   /* ──────────── Navigation ──────────── */
 
@@ -394,157 +235,53 @@ export default function CheckoutForm() {
 
   const handleShippingSubmit = () => {
     setCompletedSteps((prev) => new Set(prev).add('shipping'));
-    goTo('payment');
+    goTo('review');
   };
 
-  const handlePaymentSubmit = (e: FormEvent) => {
-    e.preventDefault();
-    if (validatePayment()) {
-      setCompletedSteps((prev) => new Set(prev).add('payment'));
-      processOrder();
-    }
-  };
+  /* ──────────── Stripe Checkout ──────────── */
 
-  /* ──────────── Express Checkout ──────────── */
+  const handleStripeCheckout = async () => {
+    setIsRedirecting(true);
+    setServerErrors([]);
 
-  const handleExpressCheckout = async (method: string) => {
-    setShowExpressLoading(method);
-    // Simulate native payment sheet
-    await new Promise((r) => setTimeout(r, 2000));
-    setShowExpressLoading(null);
-
-    // Auto-fill with mock data as if the payment sheet returned info
-    setShipping({
-      email: 'customer@example.com',
-      firstName: 'Alex',
-      lastName: 'Johnson',
-      phone: '(541) 555-0123',
-      address: '123 Main Street',
-      apartment: '',
-      city: 'Bend',
-      state: 'OR',
-      zip: '97701',
-      country: 'US',
-    });
-    setSelectedShippingMethod('standard');
-    setCompletedSteps(new Set<CheckoutStep>(['information', 'shipping', 'payment']));
-    processOrder(method === 'apple-pay' ? 'Apple Pay' : 'Google Pay');
-  };
-
-  /* ──────────── Order Processing ──────────── */
-
-  const processOrder = async (expressMethod?: string) => {
-    goTo('processing');
-    setProcessingStage(0);
-
-    const stages = [
-      'Securing connection...',
-      'Validating your details...',
-      'Verifying payment method...',
-      'Reserving your spot...',
-      'Confirming waitlist entry...',
-    ];
-
-    for (let i = 0; i < stages.length; i++) {
-      setProcessingStage(i);
-      await new Promise((r) => setTimeout(r, 600 + Math.random() * 800));
-    }
-
-    // Save card if requested
-    if (!expressMethod && useNewCard || (savedCards.length === 0 && !expressMethod)) {
-      if (payment.saveCard && payment.cardNumber) {
-        const brand = getCardBrand(payment.cardNumber);
-        const newCard: SavedCard = {
-          id: generateToken(),
-          brand,
-          last4: payment.cardNumber.replace(/\D/g, '').slice(-4),
-          name: payment.cardName,
-          expiry: payment.expiry,
-          token: generateToken(),
-        };
-        const updated = [...savedCards, newCard];
-        setSavedCards(updated);
-        saveSavedCards(updated);
-      }
-    }
-
-    // Build payment method string
-    let paymentMethodStr = expressMethod || '';
-    if (!paymentMethodStr) {
-      if (selectedSavedCard && !useNewCard) {
-        const card = savedCards.find((c) => c.id === selectedSavedCard);
-        paymentMethodStr = card ? `${getCardBrandLabel(card.brand)} ending in ${card.last4}` : 'Saved card';
-      } else {
-        const brand = getCardBrand(payment.cardNumber);
-        const last4 = payment.cardNumber.replace(/\D/g, '').slice(-4);
-        paymentMethodStr = `${getCardBrandLabel(brand)} ending in ${last4}`;
-      }
-    }
-
-    const confirmation: OrderConfirmation = {
-      id: generateOrderId(),
-      email: shipping.email || 'customer@example.com',
-      total,
-      subtotal,
-      shippingCost,
-      tax,
-      itemCount: items.reduce((s, i) => s + i.quantity, 0),
-      estimatedDelivery: 'We\'ll notify you when we launch!',
-      shippingMethod: shippingMethod.name,
-      shippingAddress: {
-        name: `${shipping.firstName} ${shipping.lastName}`,
-        address: shipping.address,
-        apartment: shipping.apartment,
-        city: shipping.city,
-        state: shipping.state,
-        zip: shipping.zip,
-      },
-      paymentMethod: paymentMethodStr,
-      items: items.map((i) => ({
-        name: i.product.name,
-        quantity: i.quantity,
-        price: i.product.price,
-        image: i.product.image,
-        tintColor: i.product.tintColor,
-      })),
-    };
-
-    // Add to waitlist via API
-    let waitlistPosition = 0;
     try {
-      const res = await fetch('/api/waitlist', {
+      const res = await fetch('/api/create-checkout-session', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          shipping,
           items: items.map((i) => ({
             productId: i.product.id,
             name: i.product.name,
             price: i.product.price,
             quantity: i.quantity,
+            image: i.product.image,
           })),
+          shipping,
+          shippingMethodId: selectedShippingMethod,
+          shippingCost,
           subtotal,
-          total,
-          paymentMethod: paymentMethodStr,
         }),
       });
 
       const data = await res.json();
-      if (!res.ok || !data.success) {
-        setServerErrors(data.errors || ['Something went wrong. Please try again.']);
-        goTo('payment');
+
+      if (!res.ok || data.error) {
+        setServerErrors([data.error || 'Something went wrong. Please try again.']);
+        setIsRedirecting(false);
         return;
       }
-      waitlistPosition = data.entry?.position || 0;
-      if (data.entry?.id) confirmation.id = data.entry.id;
-    } catch {
-      // Network error — still show confirmation for mock purposes
-    }
 
-    setOrderConfirmation(confirmation);
-    setWaitlistPosition(waitlistPosition);
-    clearCart();
-    goTo('confirmation');
+      // Redirect to Stripe Checkout
+      if (data.url) {
+        window.location.href = data.url;
+      } else {
+        setServerErrors(['Unable to create payment session. Please try again.']);
+        setIsRedirecting(false);
+      }
+    } catch {
+      setServerErrors(['Network error. Please check your connection and try again.']);
+      setIsRedirecting(false);
+    }
   };
 
   /* ──────────── Field helpers ──────────── */
@@ -552,33 +289,6 @@ export default function CheckoutForm() {
   const updateShipping = (field: keyof ShippingData, value: string) => {
     setShipping((p) => ({ ...p, [field]: value }));
     if (shippingErrors[field]) setShippingErrors((p) => { const n = { ...p }; delete n[field]; return n; });
-  };
-
-  const updatePayment = (field: keyof PaymentData, value: string | boolean) => {
-    let v = value;
-    if (field === 'cardNumber' && typeof v === 'string') v = formatCardNumber(v);
-    if (field === 'expiry' && typeof v === 'string') v = formatExpiry(v);
-    if (field === 'cvv' && typeof v === 'string') v = (v as string).replace(/\D/g, '').slice(0, 4);
-    setPayment((p) => ({ ...p, [field]: v }));
-    if (paymentErrors[field as keyof PaymentData]) setPaymentErrors((p) => { const n = { ...p }; delete n[field as keyof PaymentData]; return n; });
-  };
-
-  const removeSavedCard = (id: string) => {
-    const updated = savedCards.filter((c) => c.id !== id);
-    setSavedCards(updated);
-    saveSavedCards(updated);
-    if (selectedSavedCard === id) {
-      setSelectedSavedCard(updated.length > 0 ? updated[0].id : null);
-      if (updated.length === 0) setUseNewCard(true);
-    }
-  };
-
-  const copyOrderId = () => {
-    if (orderConfirmation) {
-      navigator.clipboard.writeText(orderConfirmation.id);
-      setCopiedOrderId(true);
-      setTimeout(() => setCopiedOrderId(false), 2000);
-    }
   };
 
   /* ──────────── Guards ──────────── */
@@ -594,20 +304,13 @@ export default function CheckoutForm() {
     );
   }
 
-  if (items.length === 0 && step !== 'confirmation' && step !== 'processing') {
+  if (items.length === 0) {
     return null;
   }
 
-  /* ──────────── PROCESSING SCREEN ──────────── */
+  /* ──────────── REDIRECTING TO STRIPE ──────────── */
 
-  if (step === 'processing') {
-    const stages = [
-      'Securing connection...',
-      'Validating order details...',
-      'Processing payment...',
-      'Confirming with bank...',
-      'Finalizing order...',
-    ];
+  if (isRedirecting) {
     return (
       <div className="section-padding max-w-lg mx-auto flex flex-col items-center justify-center min-h-[60vh] text-center">
         <div className="relative mb-8">
@@ -616,189 +319,18 @@ export default function CheckoutForm() {
           </div>
           <Lock size={24} className="absolute inset-0 m-auto text-slime-purple" />
         </div>
-        <h2 className="font-display text-2xl font-bold mb-2">Reserving Your Spot</h2>
-        <p className="text-gray-500 text-sm mb-8">Please don&apos;t close this page</p>
-        <div className="w-full max-w-xs space-y-3">
-          {stages.map((label, i) => (
-            <div key={i} className="flex items-center gap-3">
-              {i < processingStage ? (
-                <CheckCircle2 size={18} className="text-slime-teal flex-shrink-0" />
-              ) : i === processingStage ? (
-                <Loader2 size={18} className="animate-spin text-slime-purple flex-shrink-0" />
-              ) : (
-                <div className="w-[18px] h-[18px] rounded-full border-2 border-gray-200 flex-shrink-0" />
-              )}
-              <span className={`text-sm ${i <= processingStage ? 'text-slime-dark font-medium' : 'text-gray-300'}`}>
-                {label}
-              </span>
-            </div>
-          ))}
-        </div>
+        <h2 className="font-display text-2xl font-bold mb-2">Redirecting to Secure Payment</h2>
+        <p className="text-gray-500 text-sm mb-4">You&apos;re being redirected to Stripe&apos;s secure payment page...</p>
+        <p className="text-xs text-gray-400">Your card details are handled entirely by Stripe. We never see your card number.</p>
         <div className="flex items-center gap-2 mt-8 text-xs text-gray-400">
           <ShieldCheck size={14} />
-          <span>256-bit SSL encrypted connection</span>
+          <span>256-bit SSL encrypted &middot; PCI compliant</span>
         </div>
-      </div>
-    );
-  }
-
-  /* ──────────── CONFIRMATION SCREEN ──────────── */
-
-  if (step === 'confirmation' && orderConfirmation) {
-    return (
-      <div className="section-padding max-w-3xl mx-auto animate-fade-in">
-        {/* Success banner */}
-        <div className="text-center mb-10">
-          <div className="relative w-20 h-20 mx-auto mb-6">
-            <div className="absolute inset-0 bg-green-100 rounded-full animate-ping opacity-30" />
-            <div className="relative w-20 h-20 rounded-full bg-green-100 flex items-center justify-center">
-              <Check size={40} className="text-green-600" />
-            </div>
-          </div>
-          <h1 className="font-display text-3xl sm:text-4xl font-bold mb-2">You&apos;re on the Waitlist!</h1>
-          <p className="text-gray-500 mb-4">
-            Confirmation sent to <span className="font-medium text-slime-dark">{orderConfirmation.email}</span>
-          </p>
-          {waitlistPosition > 0 && (
-            <div className="inline-flex items-center gap-2 px-5 py-2.5 bg-slime-purple/10 rounded-full">
-              <span className="text-sm text-gray-500">Your position:</span>
-              <span className="font-display font-bold text-2xl text-slime-purple">#{waitlistPosition}</span>
-            </div>
-          )}
-        </div>
-
-        {/* Order ID */}
-        <div className="bg-gradient-to-r from-slime-purple/5 to-slime-pink/5 rounded-2xl p-4 flex items-center justify-between mb-8">
-          <div>
-            <p className="text-xs text-gray-400 uppercase tracking-wider font-medium">Order Number</p>
-            <p className="font-display font-bold text-xl text-slime-purple">{orderConfirmation.id}</p>
-          </div>
-          <button
-            onClick={copyOrderId}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white border border-gray-200 text-xs font-medium hover:bg-gray-50 transition-colors"
-          >
-            {copiedOrderId ? <><CheckCircle2 size={14} className="text-green-500" /> Copied!</> : <><Copy size={14} /> Copy</>}
-          </button>
-        </div>
-
-        <div className="grid md:grid-cols-2 gap-6 mb-8">
-          {/* Shipping info */}
-          <div className="bg-white rounded-2xl border border-gray-100 p-5 shadow-sm">
-            <h3 className="font-display font-bold text-sm flex items-center gap-2 mb-3">
-              <MapPin size={16} className="text-slime-teal" /> Shipping Address
-            </h3>
-            <p className="text-sm text-gray-600 leading-relaxed">
-              {orderConfirmation.shippingAddress.name}<br />
-              {orderConfirmation.shippingAddress.address}
-              {orderConfirmation.shippingAddress.apartment && <>, {orderConfirmation.shippingAddress.apartment}</>}<br />
-              {orderConfirmation.shippingAddress.city}, {orderConfirmation.shippingAddress.state} {orderConfirmation.shippingAddress.zip}
-            </p>
-          </div>
-
-          {/* Delivery info */}
-          <div className="bg-white rounded-2xl border border-gray-100 p-5 shadow-sm">
-            <h3 className="font-display font-bold text-sm flex items-center gap-2 mb-3">
-              <Truck size={16} className="text-slime-teal" /> Delivery Details
-            </h3>
-            <p className="text-sm text-gray-600">
-              <span className="font-medium text-slime-dark">{orderConfirmation.shippingMethod}</span><br />
-              Estimated delivery: <span className="font-medium text-slime-dark">{orderConfirmation.estimatedDelivery}</span>
-            </p>
-          </div>
-
-          {/* Payment info */}
-          <div className="bg-white rounded-2xl border border-gray-100 p-5 shadow-sm">
-            <h3 className="font-display font-bold text-sm flex items-center gap-2 mb-3">
-              <CreditCard size={16} className="text-slime-teal" /> Payment Method
-            </h3>
-            <p className="text-sm text-gray-600">{orderConfirmation.paymentMethod}</p>
-          </div>
-
-          {/* Order total */}
-          <div className="bg-white rounded-2xl border border-gray-100 p-5 shadow-sm">
-            <h3 className="font-display font-bold text-sm flex items-center gap-2 mb-3">
-              <Wallet size={16} className="text-slime-teal" /> Order Total
-            </h3>
-            <div className="space-y-1 text-sm">
-              <div className="flex justify-between text-gray-500"><span>Subtotal</span><span>${orderConfirmation.subtotal.toFixed(2)}</span></div>
-              <div className="flex justify-between text-gray-500"><span>Shipping</span><span>{orderConfirmation.shippingCost === 0 ? 'FREE' : `$${orderConfirmation.shippingCost.toFixed(2)}`}</span></div>
-              <div className="flex justify-between text-gray-500"><span>Tax</span><span>${orderConfirmation.tax.toFixed(2)}</span></div>
-              <div className="flex justify-between font-display font-bold text-lg pt-2 border-t border-gray-100 text-slime-dark">
-                <span>Total</span><span>${orderConfirmation.total.toFixed(2)}</span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Items ordered */}
-        <div className="bg-white rounded-2xl border border-gray-100 p-5 shadow-sm mb-8">
-          <h3 className="font-display font-bold text-sm flex items-center gap-2 mb-4">
-            <Package size={16} className="text-slime-teal" /> Items Ordered ({orderConfirmation.itemCount})
-          </h3>
-          <div className="space-y-3">
-            {orderConfirmation.items.map((item, i) => (
-              <div key={i} className="flex items-center gap-3">
-                <div className="relative w-14 h-14 rounded-xl overflow-hidden flex-shrink-0">
-                  <Image src={item.image} alt={item.name} fill sizes="56px" className="object-cover" />
-                  <div className="absolute inset-0 opacity-45 mix-blend-color" style={{ backgroundColor: item.tintColor }} />
-                </div>
-                <div className="flex-1 min-w-0">
-                  <p className="font-medium text-sm truncate">{item.name}</p>
-                  <p className="text-xs text-gray-400">Qty: {item.quantity}</p>
-                </div>
-                <p className="font-medium text-sm">${(item.price * item.quantity).toFixed(2)}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Status timeline */}
-        <div className="bg-gradient-to-r from-slime-teal/5 to-slime-purple/5 rounded-2xl p-5 mb-8">
-          <h3 className="font-display font-bold text-sm mb-4">What Happens Next</h3>
-          <div className="space-y-4">
-            {[
-              { label: 'Waitlist reservation confirmed', time: 'Just now', done: true },
-              { label: 'Payment method verified (not charged)', time: 'Just now', done: true },
-              { label: 'Market study in progress', time: 'In progress', done: false },
-              { label: 'Launch announcement', time: 'Coming soon', done: false },
-              { label: 'Your order ships & card is charged', time: 'After launch', done: false },
-            ].map((s, i) => (
-              <div key={i} className="flex items-start gap-3">
-                <div className="flex flex-col items-center">
-                  <div className={`w-3 h-3 rounded-full ${s.done ? 'bg-slime-teal' : i === 2 ? 'bg-slime-yellow ring-4 ring-slime-yellow/20' : 'bg-gray-200'}`} />
-                  {i < 4 && <div className={`w-0.5 h-6 ${s.done ? 'bg-slime-teal' : 'bg-gray-200'}`} />}
-                </div>
-                <div className="-mt-0.5">
-                  <p className={`text-sm ${s.done || i === 2 ? 'font-medium text-slime-dark' : 'text-gray-400'}`}>{s.label}</p>
-                  <p className="text-xs text-gray-400">{s.time}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Actions */}
-        <div className="flex flex-col sm:flex-row gap-3 justify-center">
-          <Link href="/shop" className="btn-primary gap-2">
-            <ShoppingBag size={16} />
-            Continue Shopping
-          </Link>
-          <button onClick={() => window.print()} className="btn-secondary gap-2">
-            <Printer size={16} />
-            Print Receipt
-          </button>
-        </div>
-
-        <p className="text-center text-xs text-gray-400 mt-6">
-          Questions about your order? <Link href="/contact" className="text-slime-purple hover:underline">Contact us</Link>
-        </p>
       </div>
     );
   }
 
   /* ──────────── MAIN CHECKOUT LAYOUT ──────────── */
-
-  const currentStepIndex = STEPS.findIndex((s) => s.key === step);
 
   return (
     <div className="section-padding max-w-6xl mx-auto">
@@ -806,7 +338,7 @@ export default function CheckoutForm() {
       <div className="flex items-center gap-2 text-sm mb-6">
         <Link href="/shop" className="text-slime-purple hover:underline">Shop</Link>
         <ChevronRight size={14} className="text-gray-300" />
-        <span className="text-gray-400">Checkout</span>
+        <span className="text-gray-400">Pre-Order Checkout</span>
       </div>
 
       {/* Step progress bar */}
@@ -845,41 +377,6 @@ export default function CheckoutForm() {
           {/* ═══ STEP 1: INFORMATION ═══ */}
           {step === 'information' && (
             <div className="animate-fade-in">
-              {/* Express checkout */}
-              <div className="mb-8">
-                <p className="text-xs text-gray-400 text-center uppercase tracking-wider font-medium mb-3">Express checkout</p>
-                <div className="grid grid-cols-2 gap-3">
-                  <button
-                    onClick={() => handleExpressCheckout('apple-pay')}
-                    disabled={!!showExpressLoading}
-                    className="flex items-center justify-center gap-2 px-4 py-3 bg-black text-white rounded-xl font-medium text-sm hover:bg-gray-800 transition-colors disabled:opacity-60"
-                  >
-                    {showExpressLoading === 'apple-pay' ? (
-                      <Loader2 size={16} className="animate-spin" />
-                    ) : (
-                      <><Smartphone size={16} /> Apple Pay</>
-                    )}
-                  </button>
-                  <button
-                    onClick={() => handleExpressCheckout('google-pay')}
-                    disabled={!!showExpressLoading}
-                    className="flex items-center justify-center gap-2 px-4 py-3 bg-white text-gray-700 border border-gray-200 rounded-xl font-medium text-sm hover:bg-gray-50 transition-colors disabled:opacity-60"
-                  >
-                    {showExpressLoading === 'google-pay' ? (
-                      <Loader2 size={16} className="animate-spin" />
-                    ) : (
-                      <><Wallet size={16} /> Google Pay</>
-                    )}
-                  </button>
-                </div>
-
-                <div className="flex items-center gap-4 my-6">
-                  <div className="flex-1 h-px bg-gray-200" />
-                  <span className="text-xs text-gray-400 uppercase tracking-wider">or continue below</span>
-                  <div className="flex-1 h-px bg-gray-200" />
-                </div>
-              </div>
-
               {/* Contact & shipping form */}
               <form onSubmit={handleInformationSubmit} ref={formRef} autoComplete="on">
                 <h2 className="font-display text-lg font-bold mb-4 flex items-center gap-2">
@@ -1001,14 +498,14 @@ export default function CheckoutForm() {
                   <ArrowLeft size={16} /> Back
                 </button>
                 <button onClick={handleShippingSubmit} className="btn-primary flex-1 gap-2">
-                  Continue to Payment <ArrowRight size={16} />
+                  Review Order <ArrowRight size={16} />
                 </button>
               </div>
             </div>
           )}
 
-          {/* ═══ STEP 3: PAYMENT ═══ */}
-          {step === 'payment' && (
+          {/* ═══ STEP 3: REVIEW & PAY ═══ */}
+          {step === 'review' && (
             <div className="animate-fade-in">
               {/* Summary bars */}
               <div className="space-y-3 mb-6">
@@ -1035,194 +532,45 @@ export default function CheckoutForm() {
                 </div>
               )}
 
-              {/* Waitlist notice */}
-              <div className="p-4 rounded-xl bg-amber-50 border border-amber-200 mb-6">
-                <p className="text-sm text-amber-800 font-medium mb-1">This is a waitlist reservation</p>
-                <p className="text-xs text-amber-700">Your card will be verified but <strong>not charged</strong> until we officially launch and ship your order. You can cancel anytime.</p>
+              {/* Pre-order notice */}
+              <div className="p-4 rounded-xl bg-slime-purple/5 border border-slime-purple/20 mb-6">
+                <p className="text-sm text-slime-dark font-medium mb-1">This is a pre-order</p>
+                <p className="text-xs text-gray-500">Your payment will be processed securely through Stripe. Your slime ships once we reach 50 pre-orders. Every pre-order includes an exclusive founder&apos;s gift!</p>
               </div>
 
-              <h2 className="font-display text-lg font-bold mb-1 flex items-center gap-2">
-                <CreditCard size={18} className="text-slime-purple" />
-                Payment Method
-              </h2>
-              <p className="text-xs text-gray-400 mb-4">Secure verification — no charge until launch.</p>
-
-              <form onSubmit={handlePaymentSubmit} autoComplete="on">
-                {/* Saved cards */}
-                {savedCards.length > 0 && (
-                  <div className="mb-6">
-                    <p className="text-sm font-medium text-gray-700 mb-3 flex items-center gap-1.5">
-                      <Star size={14} className="text-slime-yellow" /> Saved Payment Methods
-                    </p>
-                    <div className="space-y-2">
-                      {savedCards.map((card) => (
-                        <div
-                          key={card.id}
-                          className={`flex items-center gap-3 p-3 rounded-xl border-2 cursor-pointer transition-all ${
-                            selectedSavedCard === card.id && !useNewCard
-                              ? 'border-slime-purple bg-slime-purple/5'
-                              : 'border-gray-100 hover:border-gray-200'
-                          }`}
-                          onClick={() => { setSelectedSavedCard(card.id); setUseNewCard(false); }}
-                        >
-                          <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center flex-shrink-0 ${selectedSavedCard === card.id && !useNewCard ? 'border-slime-purple' : 'border-gray-200'}`}>
-                            {selectedSavedCard === card.id && !useNewCard && <div className="w-2.5 h-2.5 rounded-full bg-slime-purple" />}
-                          </div>
-                          <div className="w-10 h-7 rounded flex items-center justify-center" style={{ backgroundColor: getCardBrandColor(card.brand) + '15' }}>
-                            <CreditCard size={14} style={{ color: getCardBrandColor(card.brand) }} />
-                          </div>
-                          <div className="flex-1">
-                            <p className="text-sm font-medium">{getCardBrandLabel(card.brand)} &middot;&middot;&middot;&middot; {card.last4}</p>
-                            <p className="text-xs text-gray-400">{card.name} &middot; Exp {card.expiry}</p>
-                          </div>
-                          <button
-                            type="button"
-                            onClick={(e) => { e.stopPropagation(); removeSavedCard(card.id); }}
-                            className="p-1 text-gray-300 hover:text-red-400 transition-colors"
-                          >
-                            <X size={14} />
-                          </button>
-                        </div>
-                      ))}
-                      {/* Add new card option */}
-                      <div
-                        className={`flex items-center gap-3 p-3 rounded-xl border-2 cursor-pointer transition-all ${
-                          useNewCard ? 'border-slime-purple bg-slime-purple/5' : 'border-gray-100 hover:border-gray-200'
-                        }`}
-                        onClick={() => setUseNewCard(true)}
-                      >
-                        <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center flex-shrink-0 ${useNewCard ? 'border-slime-purple' : 'border-gray-200'}`}>
-                          {useNewCard && <div className="w-2.5 h-2.5 rounded-full bg-slime-purple" />}
-                        </div>
-                        <CreditCard size={16} className="text-gray-400" />
-                        <p className="text-sm font-medium text-gray-600">Use a new card</p>
-                      </div>
-                    </div>
-                  </div>
-                )}
-
-                {/* New card form */}
-                {(useNewCard || savedCards.length === 0) && (
-                  <div className="border border-gray-200 rounded-2xl p-5 mb-4 space-y-3">
-                    <div className="flex items-center justify-between mb-1">
-                      <div className="flex items-center gap-2 text-xs text-gray-400">
-                        <Lock size={12} />
-                        <span>Card details are never stored on our servers</span>
-                      </div>
-                      {/* Card brand badges */}
-                      <div className="flex gap-1">
-                        {['visa', 'mastercard', 'amex', 'discover'].map((b) => (
-                          <div
-                            key={b}
-                            className={`w-8 h-5 rounded text-[8px] font-bold flex items-center justify-center transition-opacity ${
-                              payment.cardNumber.replace(/\D/g, '').length >= 2 && getCardBrand(payment.cardNumber) !== b
-                                ? 'opacity-20'
-                                : 'opacity-100'
-                            }`}
-                            style={{ backgroundColor: getCardBrandColor(b) + '15', color: getCardBrandColor(b) }}
-                          >
-                            {b.slice(0, 4).toUpperCase()}
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-
-                    <Input
-                      label="Card number"
-                      value={payment.cardNumber}
-                      onChange={(v) => updatePayment('cardNumber', v)}
-                      error={paymentErrors.cardNumber}
-                      autoComplete="cc-number"
-                      inputMode="numeric"
-                      placeholder="1234 5678 9012 3456"
-                      name="cardnumber"
-                    />
-                    <Input
-                      label="Name on card"
-                      value={payment.cardName}
-                      onChange={(v) => updatePayment('cardName', v)}
-                      error={paymentErrors.cardName}
-                      autoComplete="cc-name"
-                      name="ccname"
-                    />
-                    <div className="grid grid-cols-2 gap-3">
-                      <Input
-                        label="Expiration (MM/YY)"
-                        value={payment.expiry}
-                        onChange={(v) => updatePayment('expiry', v)}
-                        error={paymentErrors.expiry}
-                        autoComplete="cc-exp"
-                        inputMode="numeric"
-                        placeholder="MM/YY"
-                        name="cc-exp"
-                      />
-                      <Input
-                        label="Security code"
-                        value={payment.cvv}
-                        onChange={(v) => updatePayment('cvv', v)}
-                        error={paymentErrors.cvv}
-                        autoComplete="cc-csc"
-                        inputMode="numeric"
-                        placeholder="CVV"
-                        maxLength={4}
-                        name="cvc"
-                      />
-                    </div>
-
-                    {/* Save card checkbox */}
-                    <label className="flex items-center gap-2 cursor-pointer pt-2">
-                      <input
-                        type="checkbox"
-                        checked={payment.saveCard}
-                        onChange={(e) => updatePayment('saveCard', e.target.checked)}
-                        className="w-4 h-4 rounded border-gray-300 text-slime-purple focus:ring-slime-purple/30"
-                      />
-                      <span className="text-sm text-gray-600">Save this card for future purchases</span>
-                    </label>
-                  </div>
-                )}
-
-                {/* Billing address */}
-                <div className="mb-6">
-                  <h3 className="font-display font-semibold text-sm mb-3">Billing Address</h3>
-                  <label className="flex items-center gap-2 cursor-pointer">
-                    <input
-                      type="radio"
-                      checked={billingMatchesShipping}
-                      onChange={() => setBillingMatchesShipping(true)}
-                      name="billing"
-                      className="w-4 h-4 text-slime-purple focus:ring-slime-purple/30"
-                    />
-                    <span className="text-sm text-gray-600">Same as shipping address</span>
-                  </label>
-                  <label className="flex items-center gap-2 cursor-pointer mt-2">
-                    <input
-                      type="radio"
-                      checked={!billingMatchesShipping}
-                      onChange={() => setBillingMatchesShipping(false)}
-                      name="billing"
-                      className="w-4 h-4 text-slime-purple focus:ring-slime-purple/30"
-                    />
-                    <span className="text-sm text-gray-600">Use a different billing address</span>
-                  </label>
+              {/* Founder's gift banner */}
+              <div className="flex items-start gap-3 p-4 bg-gradient-to-r from-slime-yellow/10 to-slime-pink/10 rounded-xl border border-slime-yellow/20 mb-6">
+                <Gift size={18} className="text-slime-yellow flex-shrink-0 mt-0.5" />
+                <div>
+                  <p className="text-sm font-display font-bold text-slime-dark">Exclusive Founder&apos;s Gift Included</p>
+                  <p className="text-xs text-gray-500">Thank you for believing in RJ Slime Factory!</p>
                 </div>
+              </div>
 
-                {/* Security badges */}
-                <div className="flex items-center gap-1.5 p-3 rounded-xl bg-green-50 border border-green-200 mb-6 text-xs text-green-700">
-                  <ShieldCheck size={16} className="flex-shrink-0" />
-                  <span>Your payment information is protected with 256-bit SSL encryption</span>
-                </div>
+              {/* Security badges */}
+              <div className="flex items-center gap-1.5 p-3 rounded-xl bg-green-50 border border-green-200 mb-6 text-xs text-green-700">
+                <ShieldCheck size={16} className="flex-shrink-0" />
+                <span>Secure payment via Stripe &mdash; your card info never touches our servers</span>
+              </div>
 
-                <div className="flex gap-3">
-                  <button type="button" onClick={() => goTo('shipping')} className="btn-secondary flex-1 gap-2">
-                    <ArrowLeft size={16} /> Back
-                  </button>
-                  <button type="submit" className="btn-primary flex-1 gap-2">
-                    <Lock size={16} />
-                    Reserve &middot; ${total.toFixed(2)}
-                  </button>
-                </div>
-              </form>
+              <div className="flex gap-3">
+                <button type="button" onClick={() => goTo('shipping')} className="btn-secondary flex-1 gap-2">
+                  <ArrowLeft size={16} /> Back
+                </button>
+                <button
+                  type="button"
+                  onClick={handleStripeCheckout}
+                  disabled={isRedirecting}
+                  className="btn-primary flex-1 gap-2 disabled:opacity-60"
+                >
+                  <Lock size={16} />
+                  Pre-Order &middot; ${total.toFixed(2)}
+                </button>
+              </div>
+
+              <p className="text-center text-[11px] text-gray-400 mt-4">
+                You&apos;ll be redirected to Stripe&apos;s secure payment page to enter your card details.
+              </p>
             </div>
           )}
         </div>
@@ -1262,11 +610,6 @@ export default function CheckoutForm() {
                   <p className="text-sm font-medium">${(item.product.price * item.quantity).toFixed(2)}</p>
                 </div>
               ))}
-            </div>
-
-            {/* Discount code */}
-            <div className="border-t border-gray-100 pt-4 mb-4">
-              <DiscountCode />
             </div>
 
             {/* Totals */}
@@ -1323,8 +666,8 @@ export default function CheckoutForm() {
             <div className="mt-5 pt-4 border-t border-gray-100 grid grid-cols-3 gap-2">
               {[
                 { icon: Lock, label: 'Secure Checkout' },
-                { icon: ShieldCheck, label: 'SSL Encrypted' },
-                { icon: Truck, label: 'Fast Shipping' },
+                { icon: ShieldCheck, label: 'Stripe Protected' },
+                { icon: CreditCard, label: 'PCI Compliant' },
               ].map(({ icon: Icon, label }) => (
                 <div key={label} className="flex flex-col items-center gap-1 text-gray-400">
                   <Icon size={14} />
@@ -1335,50 +678,6 @@ export default function CheckoutForm() {
           </div>
         </div>
       </div>
-    </div>
-  );
-}
-
-/* ================================================================
-   DISCOUNT CODE COMPONENT
-   ================================================================ */
-
-function DiscountCode() {
-  const [code, setCode] = useState('');
-  const [applied, setApplied] = useState(false);
-  const [error, setError] = useState('');
-
-  const applyCode = () => {
-    if (!code.trim()) return;
-    // Mock: accept "SLIME10" as a valid code
-    if (code.toUpperCase() === 'SLIME10') {
-      setApplied(true);
-      setError('');
-    } else {
-      setError('Invalid discount code');
-      setApplied(false);
-    }
-  };
-
-  return (
-    <div>
-      <div className="flex gap-2">
-        <input
-          type="text"
-          value={code}
-          onChange={(e) => { setCode(e.target.value); setError(''); setApplied(false); }}
-          placeholder="Discount code"
-          className="flex-1 px-3 py-2 rounded-xl border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-slime-purple/30 focus:border-slime-purple"
-        />
-        <button
-          onClick={applyCode}
-          className="px-4 py-2 rounded-xl border border-gray-200 text-sm font-medium text-gray-600 hover:bg-gray-50 transition-colors"
-        >
-          Apply
-        </button>
-      </div>
-      {error && <p className="text-xs text-red-500 mt-1">{error}</p>}
-      {applied && <p className="text-xs text-slime-teal mt-1 flex items-center gap-1"><Check size={12} /> Code applied!</p>}
     </div>
   );
 }

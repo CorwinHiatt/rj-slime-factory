@@ -56,7 +56,7 @@ export default function ShippingPage() {
             Shipping & <span className="gradient-text">Returns</span>
           </h1>
           <p className="text-gray-500 max-w-lg mx-auto text-lg">
-            Everything you need to know about getting your slime delivered.
+            Everything you need to know about pre-orders, shipping, and returns.
           </p>
         </div>
       </section>
@@ -87,16 +87,19 @@ export default function ShippingPage() {
       <section className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="space-y-8">
           <div>
-            <h2 className="font-display text-2xl font-bold mb-3">Shipping Policy</h2>
+            <h2 className="font-display text-2xl font-bold mb-3">Pre-Order &amp; Shipping Policy</h2>
             <div className="text-gray-600 space-y-3 leading-relaxed">
               <p>
-                All orders are processed from our studio in Bend, Oregon within <strong>1-3 business days</strong> (Monday-Friday, excluding holidays). Because every slime is handcrafted fresh, we need a bit of time to make yours perfect.
+                RJ Slime Factory operates on a <strong>pre-order model</strong>. When you place a pre-order, your payment is processed immediately and goes directly toward funding our first production run. <strong>Shipping begins once we reach 50 pre-orders.</strong>
               </p>
               <p>
-                Standard shipping within the United States takes <strong>3-5 business days</strong> after processing. You will receive a tracking number via email once your order ships.
+                Once production starts, orders are handcrafted from our studio in Bend, Oregon. Standard shipping within the United States takes <strong>3-5 business days</strong> after your order is made. You will receive a tracking number via email once your order ships.
               </p>
               <p>
                 <strong>Free shipping</strong> is available on all orders of $50 or more. Orders under $50 have a flat rate of $5.99.
+              </p>
+              <p>
+                Every one of our first 50 pre-orders includes an <strong>exclusive founder&apos;s gift</strong> as our thank you for believing in RJ Slime Factory.
               </p>
             </div>
           </div>

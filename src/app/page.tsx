@@ -2,16 +2,17 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
-import { ArrowRight, Sparkles, Truck, Heart, Star, Clock } from 'lucide-react';
+import { ArrowRight, Sparkles, Truck, Heart, Star, Gift, Target } from 'lucide-react';
 import ProductCard from '@/components/ProductCard';
 import ScrollReveal from '@/components/ScrollReveal';
+import PreOrderProgress from '@/components/PreOrderProgress';
 import { featuredProducts, categories } from '@/data/products';
 
 const perks = [
   { icon: Sparkles, title: 'Handcrafted', desc: 'Small batch quality' },
   { icon: Truck, title: 'Free Shipping', desc: 'On orders over $50' },
-  { icon: Heart, title: 'Made with Love', desc: 'Premium ingredients' },
-  { icon: Clock, title: 'Coming Soon', desc: 'Join the waitlist' },
+  { icon: Gift, title: 'Founder\'s Gift', desc: 'Free with pre-order' },
+  { icon: Target, title: 'Pre-Orders Open', desc: 'Only 50 spots' },
 ];
 
 export default function HomePage() {
@@ -37,7 +38,7 @@ export default function HomePage() {
                 <div className="relative aspect-[3/4] rounded-[2.5rem] overflow-hidden shadow-2xl shadow-slime-purple/20">
                   <Image
                     src="/rj-founder.png"
-                    alt="River Jordan Hiatt - Founder of RJ Slime Factory"
+                    alt="River Jordan Hiatt - Young Founder of RJ Slime Factory"
                     fill
                     sizes="(max-width: 768px) 100vw, 400px"
                     className="object-cover object-top"
@@ -55,7 +56,7 @@ export default function HomePage() {
 
                 {/* Badge */}
                 <div className="absolute -bottom-3 left-1/2 -translate-x-1/2 bg-white rounded-2xl shadow-xl shadow-black/8 px-6 py-3 border border-gray-100 whitespace-nowrap">
-                  <p className="font-display font-bold text-transparent bg-clip-text bg-gradient-to-r from-slime-pink via-slime-purple to-slime-teal text-sm">The Brain Behind the Slime</p>
+                  <p className="font-display font-bold text-transparent bg-clip-text bg-gradient-to-r from-slime-pink via-slime-purple to-slime-teal text-sm">Young Entrepreneur &amp; Slime Creator</p>
                 </div>
               </div>
             </ScrollReveal>
@@ -63,7 +64,7 @@ export default function HomePage() {
             {/* Text */}
             <ScrollReveal direction="right" delay={100} className="order-1 lg:order-2">
               <span className="inline-block px-4 py-1.5 bg-slime-pink/8 text-slime-pink font-display font-semibold text-xs tracking-wider uppercase rounded-full mb-8">
-                Meet the Founder
+                Pre-Orders Now Open
               </span>
               <h1 className="font-display text-5xl sm:text-6xl lg:text-[4.5rem] font-bold leading-[1.05] mb-5">
                 Meet{' '}
@@ -73,27 +74,23 @@ export default function HomePage() {
                 River Jordan Hiatt
               </h2>
               <p className="text-base text-gray-500 max-w-lg mb-4 leading-relaxed">
-                The brain behind RJ Slime Factory. River Jordan is a slime expert who has spent years testing every texture on the market. Now he&apos;s channeling that expertise into creating his own line of premium slimes.
+                RJ is a young entrepreneur with a big dream &mdash; to create the most satisfying, premium slimes you&apos;ve ever felt. After years of testing every texture on the market, he&apos;s ready to launch his own line.
               </p>
               <p className="text-base text-gray-500 max-w-lg mb-10 leading-relaxed">
-                RJ Slime Factory is gearing up for launch. Reserve your favorites now and be first in line when we ship.
+                <strong className="text-slime-dark">Here&apos;s how it works:</strong> Pre-order your favorite slimes now. Once we hit 50 orders, your support funds our first production run and we start shipping. Every pre-order gets an exclusive founder&apos;s gift as our thank you.
               </p>
               <div className="flex flex-wrap gap-4">
                 <Link href="/shop" className="btn-primary">
-                  Browse &amp; Reserve <ArrowRight size={16} className="ml-2" />
+                  Pre-Order Now <ArrowRight size={16} className="ml-2" />
                 </Link>
                 <Link href="/about" className="btn-secondary">
                   Our Story
                 </Link>
               </div>
 
-              {/* Waitlist CTA */}
-              <div className="flex items-center gap-5 mt-12 pt-8 border-t border-gray-100">
-                <div className="flex items-center gap-2 px-4 py-2 bg-slime-teal/10 rounded-xl">
-                  <div className="w-2 h-2 rounded-full bg-slime-teal animate-pulse" />
-                  <span className="text-sm font-display font-semibold text-slime-teal">Waitlist Open</span>
-                </div>
-                <p className="text-xs text-gray-400">Reserve your spot &mdash; no charge until we ship</p>
+              {/* Pre-order progress */}
+              <div className="mt-10">
+                <PreOrderProgress variant="compact" showGift={false} />
               </div>
             </ScrollReveal>
           </div>
@@ -121,17 +118,69 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* How Pre-Orders Work */}
+      <section className="section-padding bg-gradient-to-b from-white to-gray-50/50">
+        <div className="max-w-5xl mx-auto">
+          <ScrollReveal>
+            <div className="text-center mb-12">
+              <p className="text-[11px] font-medium tracking-[0.2em] uppercase text-slime-teal mb-4">How it works</p>
+              <h2 className="font-display text-4xl sm:text-5xl font-bold mb-4">
+                Support a Young <span className="gradient-text">Entrepreneur</span>
+              </h2>
+              <p className="text-gray-400 max-w-lg mx-auto text-[15px]">
+                Your pre-order directly funds RJ&apos;s dream of launching his own slime brand. Here&apos;s the process:
+              </p>
+            </div>
+          </ScrollReveal>
+
+          <div className="grid sm:grid-cols-3 gap-6">
+            {[
+              {
+                step: '1',
+                title: 'Pre-Order Your Favorites',
+                desc: 'Browse our collection and place your pre-order. Your payment is processed securely and goes directly toward funding production.',
+              },
+              {
+                step: '2',
+                title: 'We Hit 50 Orders',
+                desc: 'Once we reach 50 pre-orders, we have the funding to begin manufacturing our first batch of premium handcrafted slimes.',
+              },
+              {
+                step: '3',
+                title: 'We Ship + You Get a Gift',
+                desc: 'Your slime ships out along with an exclusive founder\'s gift — our way of saying thank you for believing in RJ Slime Factory.',
+              },
+            ].map((item, i) => (
+              <ScrollReveal key={item.step} delay={i * 100} direction="up">
+                <div className="bg-white rounded-2xl p-7 border border-gray-100 shadow-sm text-center h-full">
+                  <div className="w-12 h-12 rounded-full bg-gradient-to-br from-slime-pink to-slime-purple flex items-center justify-center mx-auto mb-5">
+                    <span className="font-display font-bold text-white text-lg">{item.step}</span>
+                  </div>
+                  <h3 className="font-display font-bold text-base mb-2">{item.title}</h3>
+                  <p className="text-gray-400 text-sm leading-relaxed">{item.desc}</p>
+                </div>
+              </ScrollReveal>
+            ))}
+          </div>
+
+          {/* Pre-order progress bar */}
+          <ScrollReveal className="mt-10 max-w-lg mx-auto">
+            <PreOrderProgress />
+          </ScrollReveal>
+        </div>
+      </section>
+
       {/* Featured Products */}
       <section className="section-padding">
         <div className="max-w-7xl mx-auto">
           <ScrollReveal>
             <div className="text-center mb-14">
-              <p className="text-[11px] font-medium tracking-[0.2em] uppercase text-slime-pink mb-4">Launching soon</p>
+              <p className="text-[11px] font-medium tracking-[0.2em] uppercase text-slime-pink mb-4">Pre-order now</p>
               <h2 className="font-display text-4xl sm:text-5xl font-bold mb-4">
                 First <span className="gradient-text">Drops</span>
               </h2>
               <p className="text-gray-400 max-w-sm mx-auto text-[15px]">
-                Reserve your favorites. Limited first-run quantities.
+                Pre-order your favorites. Limited to our first 50 supporters.
               </p>
             </div>
           </ScrollReveal>
@@ -184,7 +233,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Why RJ */}
+      {/* Why RJ — with young entrepreneur story */}
       <section className="section-padding bg-slime-dark text-white relative overflow-hidden noise">
         <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-slime-pink/[0.04] rounded-full blur-[120px]" />
         <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-slime-teal/[0.04] rounded-full blur-[100px]" />
@@ -192,19 +241,23 @@ export default function HomePage() {
         <div className="relative max-w-7xl mx-auto z-10">
           <div className="grid lg:grid-cols-2 gap-16 items-center">
             <ScrollReveal direction="left">
-              <p className="text-[11px] font-medium tracking-[0.2em] uppercase text-slime-teal/80 mb-6">Why choose us</p>
+              <p className="text-[11px] font-medium tracking-[0.2em] uppercase text-slime-teal/80 mb-6">Why pre-order from us</p>
               <h2 className="font-display text-4xl sm:text-5xl font-bold mb-7 leading-tight">
                 Why RJ Slime Factory?
               </h2>
+              <p className="text-gray-400 text-base leading-relaxed mb-4">
+                RJ Slime Factory isn&apos;t just another slime shop &mdash; it&apos;s the dream of a young entrepreneur who lives and breathes slime. Your pre-order doesn&apos;t just get you premium slime &mdash; it helps fund a kid&apos;s real business.
+              </p>
               <p className="text-gray-400 text-base leading-relaxed mb-8">
-                RJ Slime Factory isn&apos;t just another slime shop &mdash; it&apos;s built by someone who lives and breathes slime. Every batch is crafted with premium ingredients, perfect textures, and custom scent blends.
+                Every batch will be crafted with premium ingredients, perfect textures, and custom scent blends. When we hit 50 pre-orders, production begins and your slime ships with an exclusive founder&apos;s gift.
               </p>
               <ul className="space-y-4 mb-10">
                 {[
                   'Premium, non-toxic ingredients',
                   'Expert-tested textures by RJ himself',
                   'Custom scents crafted in-house',
-                  'Made to make you smile',
+                  'Your support funds a young entrepreneur',
+                  'Exclusive gift with every pre-order',
                 ].map((item) => (
                   <li key={item} className="flex items-center gap-3">
                     <span className="w-1.5 h-1.5 rounded-full bg-slime-teal flex-shrink-0" />
@@ -223,7 +276,7 @@ export default function HomePage() {
                 <div className="relative rounded-[2.5rem] overflow-hidden shadow-2xl h-full">
                   <Image
                     src="/rj-portrait.jpg"
-                    alt="River Jordan Hiatt — Founder of RJ Slime Factory"
+                    alt="River Jordan Hiatt — Young Founder of RJ Slime Factory"
                     fill
                     sizes="(max-width: 768px) 100vw, 380px"
                     className="object-cover object-top"
@@ -242,18 +295,22 @@ export default function HomePage() {
       <section className="section-padding bg-slime-dark text-white text-center relative overflow-hidden noise">
         <div className="absolute inset-0 bg-gradient-to-br from-slime-pink/10 via-slime-purple/10 to-slime-teal/10" />
         <ScrollReveal className="relative z-10 max-w-xl mx-auto">
+          <div className="inline-flex items-center gap-2 px-4 py-2 bg-slime-yellow/15 rounded-full mb-6">
+            <Gift size={16} className="text-slime-yellow" />
+            <span className="text-sm font-display font-semibold text-slime-yellow">Exclusive gift with every pre-order</span>
+          </div>
           <h2 className="font-display text-4xl sm:text-5xl font-bold mb-5">
-            Ready to Get Slimy?
+            Be One of Our First 50
           </h2>
           <p className="text-gray-400 text-base mb-10">
-            We&apos;re gearing up for launch. Reserve your slimes now and be first to get them.
+            Pre-order now to help fund RJ&apos;s first production run. Every supporter gets an exclusive founder&apos;s gift for believing in RJSLIME from day one.
           </p>
           <Link
             href="/shop"
             className="inline-flex items-center px-10 py-4 bg-white text-slime-dark font-display font-bold rounded-full
               transition-all duration-500 ease-out shadow-xl shadow-white/10 hover:-translate-y-0.5 hover:shadow-2xl hover:shadow-white/20 text-[15px]"
           >
-            Join the Waitlist <ArrowRight size={16} className="ml-2" />
+            Pre-Order Now <ArrowRight size={16} className="ml-2" />
           </Link>
         </ScrollReveal>
       </section>

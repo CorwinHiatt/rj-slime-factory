@@ -43,7 +43,7 @@ export default function ProductCard({ product }: { product: Product }) {
             aria-label={`Add ${product.name} to cart`}
           >
             <Plus size={16} strokeWidth={2.5} />
-            Reserve
+            Pre-Order
           </button>
         </div>
       </div>

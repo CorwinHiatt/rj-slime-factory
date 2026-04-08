@@ -1,25 +1,26 @@
 import type { Metadata } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
-import { ArrowRight, Heart, Sparkles, Shield, Leaf } from 'lucide-react';
+import { ArrowRight, Heart, Sparkles, Shield, Leaf, Gift } from 'lucide-react';
 
 export const metadata: Metadata = {
   title: 'About RJ Slime Factory - Meet River Jordan Hiatt',
   description:
-    'Meet River Jordan Hiatt, the young entrepreneur behind RJ Slime Factory in Bend, Oregon. Learn about our story, values, slime care tips, and what makes our handcrafted slime the best.',
+    'Meet River Jordan Hiatt, the young entrepreneur behind RJ Slime Factory in Bend, Oregon. Learn about our pre-order model, how your support funds our first production run, and the exclusive founder\'s gift for our first 50 supporters.',
   keywords: [
     'RJ Slime Factory about',
     'River Jordan Hiatt',
     'slime maker Bend Oregon',
     'young entrepreneur slime',
     'handcrafted slime story',
+    'slime pre-order',
     'slime care guide',
     'how to care for slime',
   ],
   openGraph: {
-    title: 'About RJ Slime Factory | Meet the Founder - Bend, OR',
+    title: 'About RJ Slime Factory | Meet the Young Founder - Bend, OR',
     description:
-      'Meet River Jordan Hiatt, the young entrepreneur behind RJ Slime Factory. Handcrafted slime made with passion in Bend, Oregon.',
+      'Meet River Jordan Hiatt, the young entrepreneur behind RJ Slime Factory. Pre-order now to help fund his first production run of handcrafted slime.',
     url: 'https://rjslime.xyz/about',
   },
   alternates: {
@@ -54,22 +55,22 @@ const timeline = [
   {
     year: '2020',
     title: 'The Slime Obsession Begins',
-    description: 'RJ discovers slime and quickly becomes the go-to slime expert among friends and family. Testing every texture, every brand.',
+    description: 'RJ discovers slime and quickly becomes the go-to slime expert among friends and family. Testing every texture, every brand — he knows what makes a slime truly satisfying.',
   },
   {
     year: '2024',
     title: 'From Tester to Creator',
-    description: 'After years of testing, RJ starts creating his own recipes. Friends are blown away by the quality.',
+    description: 'After years of testing, RJ starts creating his own recipes. Friends and family are blown away by the quality — and they keep asking for more.',
   },
   {
     year: '2025',
     title: 'RJ Slime Factory Is Born',
-    description: 'The idea becomes real. RJ begins perfecting his signature line of handcrafted slimes in Bend, Oregon.',
+    description: 'The idea becomes a real business plan. RJ begins perfecting his signature line of handcrafted slimes in Bend, Oregon, with a vision to share them with the world.',
   },
   {
     year: '2026',
-    title: 'Launching Soon',
-    description: 'The waitlist is open. RJ is finalizing recipes and preparing for the first official drop. Join the list to be first in line.',
+    title: 'Pre-Orders Launch',
+    description: 'RJ Slime Factory opens pre-orders for the first 50 supporters. Every pre-order directly funds manufacturing — and includes an exclusive founder\'s gift as a thank you for believing in the dream.',
   },
 ];
 
@@ -92,14 +93,21 @@ export default function AboutPage() {
                 <span className="gradient-text">RJ</span>
               </h1>
               <h2 className="font-display text-2xl font-semibold text-gray-700 mb-6">
-                River Jordan Hiatt &mdash; Founder &amp; Chief Slime Scientist
+                River Jordan Hiatt &mdash; Young Entrepreneur &amp; Slime Creator
               </h2>
               <p className="text-lg text-gray-600 leading-relaxed mb-6">
-                River Jordan Hiatt is the brain behind RJ Slime Factory. A lifelong slime enthusiast, RJ has spent years testing every texture on the market. He knows exactly what makes a slime satisfying &mdash; the perfect stretch, the right texture, the ideal sound.
+                River Jordan Hiatt is a young entrepreneur with a passion that runs deep. After years of testing every slime texture on the market, RJ decided it was time to stop just buying slime &mdash; and start making it. He knows exactly what makes a slime satisfying: the perfect stretch, the right texture, the ideal sound.
               </p>
-              <p className="text-lg text-gray-600 leading-relaxed">
-                Now RJ is channeling that expertise into creating his own line of premium slimes. Every batch is handcrafted with love, tested by RJ himself, and made to bring joy to your hands. RJ Slime Factory is gearing up for launch &mdash; join the waitlist to be first in line.
+              <p className="text-lg text-gray-600 leading-relaxed mb-6">
+                But turning a dream into a business takes support. That&apos;s why RJ Slime Factory runs on a pre-order model: <strong>the first 50 orders directly fund our initial production run.</strong> Every pre-order is an investment in a young creator&apos;s vision &mdash; and every supporter receives an exclusive founder&apos;s gift as our way of saying thank you for the faith and belief in RJSLIME.
               </p>
+              <div className="flex items-start gap-3 p-4 bg-gradient-to-r from-slime-yellow/10 to-slime-pink/10 rounded-xl border border-slime-yellow/20">
+                <Gift size={20} className="text-slime-yellow flex-shrink-0 mt-0.5" />
+                <div>
+                  <p className="font-display font-bold text-slime-dark text-sm">Exclusive Founder&apos;s Gift</p>
+                  <p className="text-sm text-gray-500">Every one of our first 50 pre-orders includes a special gift — our heartfelt thank you for believing in RJ and supporting a young entrepreneur from day one.</p>
+                </div>
+              </div>
             </div>
 
             <div className="relative max-w-[400px] mx-auto">
@@ -113,7 +121,7 @@ export default function AboutPage() {
                 <div className="absolute inset-0 bg-gradient-to-t from-slime-dark/60 via-transparent to-transparent z-10" />
                 <Image
                   src="/rj-portrait.jpg"
-                  alt="River Jordan Hiatt - Founder of RJ Slime Factory"
+                  alt="River Jordan Hiatt - Young Founder of RJ Slime Factory"
                   fill
                   sizes="(max-width: 768px) 100vw, 400px"
                   className="object-cover object-top"
@@ -245,16 +253,16 @@ export default function AboutPage() {
       <section className="section-padding bg-gradient-to-r from-slime-pink via-slime-purple to-slime-teal text-white text-center">
         <div className="max-w-2xl mx-auto">
           <h2 className="font-display text-4xl sm:text-5xl font-bold mb-4">
-            Come Get Slimy With Us
+            Be Part of Our First 50
           </h2>
           <p className="text-white/80 text-lg mb-8">
-            Browse our lineup and reserve your favorites before we launch.
+            Pre-order your favorites and help fund RJ&apos;s dream. Every supporter gets an exclusive founder&apos;s gift.
           </p>
           <Link
             href="/shop"
             className="inline-flex items-center px-10 py-4 bg-white text-slime-purple font-display font-bold rounded-full hover:scale-105 transition-transform shadow-xl text-lg"
           >
-            Browse &amp; Reserve <ArrowRight size={20} className="ml-2" />
+            Pre-Order Now <ArrowRight size={20} className="ml-2" />
           </Link>
         </div>
       </section>

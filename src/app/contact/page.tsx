@@ -20,7 +20,7 @@ const contactInfo = [
     icon: Clock,
     title: 'Hours',
     detail: 'Mon-Fri 9AM-5PM PST',
-    sub: 'New drops every Friday at 5PM',
+    sub: 'Pre-orders open now',
   },
   {
     icon: Instagram,
@@ -32,9 +32,19 @@ const contactInfo = [
 
 const faqs = [
   {
-    question: 'How long does shipping take?',
+    question: 'How do pre-orders work?',
     answer:
-      'Orders are processed within 1-3 business days. Standard shipping takes 3-5 business days. Free shipping on orders over $50!',
+      'When you place a pre-order, your payment is processed immediately and goes directly toward funding our first production run. Once we hit 50 orders, we begin manufacturing and ship your slime along with an exclusive founder\'s gift.',
+  },
+  {
+    question: 'When will my order ship?',
+    answer:
+      'Shipping begins once we reach 50 pre-orders. We\'ll email you with updates on our progress and a shipping date once production starts. We anticipate hitting our goal soon!',
+  },
+  {
+    question: 'What is the founder\'s gift?',
+    answer:
+      'Every one of our first 50 pre-orders includes an exclusive thank-you gift from RJ himself. It\'s our way of showing gratitude for believing in RJ Slime Factory from the very beginning. The exact gift is a surprise!',
   },
   {
     question: 'Do you ship internationally?',
@@ -52,14 +62,9 @@ const faqs = [
       'Yes! All our slimes are made with non-toxic, skin-safe ingredients. Recommended for ages 6+. Adult supervision recommended for younger children.',
   },
   {
-    question: 'When do you restock?',
+    question: 'Can I cancel my pre-order?',
     answer:
-      'New drops happen every Friday at 5PM EST. Follow us on Instagram and sign up for our newsletter to get notified!',
-  },
-  {
-    question: 'Can I return or exchange slime?',
-    answer:
-      'Due to the handmade nature of our products, we don\'t accept returns on opened items. Unopened items can be returned within 14 days.',
+      'Yes, you can cancel your pre-order for a full refund before production begins. Once manufacturing starts (after we hit 50 orders), cancellations may not be possible. Contact us for details.',
   },
   {
     question: 'My slime is sticky/hard. What do I do?',

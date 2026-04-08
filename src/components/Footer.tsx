@@ -35,10 +35,10 @@ export default function Footer() {
               Stay in the loop
             </p>
             <h3 className="font-display text-3xl sm:text-4xl font-bold mb-4 text-white">
-              Don&apos;t Miss a Drop
+              Don&apos;t Miss Out
             </h3>
             <p className="text-gray-500 mb-8 text-[15px]">
-              New slimes, restocks, and exclusive deals. Straight to your inbox.
+              Pre-order updates, production milestones, and launch news. Straight to your inbox.
             </p>
             <form
               className="flex flex-col sm:flex-row gap-3"
@@ -65,7 +65,7 @@ export default function Footer() {
           <div className="col-span-2">
             <Logo className="h-11 w-auto mb-5 brightness-0 invert opacity-80" />
             <p className="text-gray-500 text-sm leading-relaxed max-w-xs">
-              Handcrafted slime made with love in Bend, Oregon. Satisfying textures, amazing scents, shipped nationwide.
+              Handcrafted slime by a young entrepreneur in Bend, Oregon. Pre-order now to help fund our first production run.
             </p>
           </div>
 

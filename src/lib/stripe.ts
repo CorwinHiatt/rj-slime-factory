@@ -1,5 +1,6 @@
 import { loadStripe, type Stripe } from '@stripe/stripe-js';
 
+// Client-side Stripe (for redirecting to Checkout)
 let stripePromise: Promise<Stripe | null> | null = null;
 
 export function getStripe() {
