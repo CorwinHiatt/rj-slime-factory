@@ -57,7 +57,7 @@ type CheckoutStep = 'information' | 'shipping' | 'review';
    ================================================================ */
 
 const SAVED_SHIPPING_KEY = 'rj-slime-saved-shipping';
-const FREE_SHIPPING_THRESHOLD = 50;
+const FREE_SHIPPING_THRESHOLD = 1;
 const TAX_RATE = 0.0; // Oregon — no sales tax
 
 const SHIPPING_METHODS: ShippingMethod[] = [
