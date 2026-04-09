@@ -1,18 +1,27 @@
 import { NextResponse } from 'next/server';
-import { readFile } from 'fs/promises';
-import { join } from 'path';
+import { getStripeServer } from '@/lib/stripe-server';
 
 export const dynamic = 'force-dynamic';
 
 export async function GET() {
+  const stripe = getStripeServer();
+
+  if (!stripe) {
+    return NextResponse.json({ count: 0, goal: 50 });
+  }
+
   try {
-    const filePath = join(process.cwd(), '.data', 'waitlist.json');
-    const data = await readFile(filePath, 'utf-8');
-    const entries = JSON.parse(data);
-    const count = Array.isArray(entries) ? entries.length : 0;
+    // Count completed checkout sessions from Stripe
+    const sessions = await stripe.checkout.sessions.list({
+      status: 'complete',
+      limit: 100,
+    });
+
+    const count = sessions.data.length;
+
     return NextResponse.json({ count, goal: 50 });
-  } catch {
-    // File doesn't exist yet — no pre-orders
+  } catch (err) {
+    console.error('Failed to fetch pre-order count from Stripe:', err);
     return NextResponse.json({ count: 0, goal: 50 });
   }
 }
