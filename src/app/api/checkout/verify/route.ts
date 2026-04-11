@@ -37,7 +37,7 @@ async function sendOrderNotification(order: {
 
   try {
     await resend.emails.send({
-      from: 'RJ Slime Factory <noreply@rjslimefactory.com>',
+      from: 'RJ Slime Factory <onboarding@resend.dev>',
       to: TEAM_EMAILS,
       subject: `New Pre-Order! ${order.orderId} — $${order.total.toFixed(2)} from ${order.shippingName}`,
       html: `

@@ -25,7 +25,7 @@ export async function POST(request: Request) {
     const subjectLabel = SUBJECT_LABELS[subject] || 'General Inquiry';
 
     const { error } = await getResend().emails.send({
-      from: 'RJ Slime Factory <noreply@rjslimefactory.com>',
+      from: 'RJ Slime Factory <onboarding@resend.dev>',
       to: 'rjslime@coleesoftwareservices.com',
       replyTo: email,
       subject: `[RJ Slime Factory] ${subjectLabel} from ${name}`,
