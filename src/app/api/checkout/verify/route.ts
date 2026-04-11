@@ -37,7 +37,7 @@ async function sendOrderNotification(order: {
 
   try {
     await resend.emails.send({
-      from: 'RJ Slime Factory <onboarding@resend.dev>',
+      from: 'RJ Slime Factory <noreply@rjslimefactory.com>',
       to: TEAM_EMAILS,
       subject: `New Pre-Order! ${order.orderId} — $${order.total.toFixed(2)} from ${order.shippingName}`,
       html: `
@@ -103,6 +103,19 @@ async function sendOrderNotification(order: {
   }
 }
 
+async function getPreOrderCount(stripe: ReturnType<typeof getStripeServer>): Promise<number> {
+  if (!stripe) return 0;
+  try {
+    const sessions = await stripe.checkout.sessions.list({
+      status: 'complete',
+      limit: 100,
+    });
+    return sessions.data.length;
+  } catch {
+    return 0;
+  }
+}
+
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const sessionId = searchParams.get('session_id');
@@ -124,6 +137,9 @@ export async function GET(request: Request) {
     }
 
     const metadata = session.metadata || {};
+
+    // Get real pre-order count from Stripe
+    const preOrderCount = await getPreOrderCount(stripe);
 
     const orderId = `RJS-${Date.now().toString(36).toUpperCase()}-${Math.random().toString(36).substring(2, 6).toUpperCase()}`;
     const total = (session.amount_total || 0) / 100;
@@ -168,7 +184,7 @@ export async function GET(request: Request) {
       orderId,
       email,
       total,
-      preOrderNumber: 1,
+      preOrderNumber: preOrderCount,
       preOrderGoal: 50,
       shippingName,
       shippingMethod,
