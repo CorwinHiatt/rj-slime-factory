@@ -53,14 +53,7 @@ function SuccessContent() {
       .finally(() => setLoading(false));
   }, [sessionId]);
 
-  // Clear cart after successful payment
-  useEffect(() => {
-    if (!loading) {
-      try {
-        localStorage.removeItem('rj-slime-cart');
-      } catch {}
-    }
-  }, [loading]);
+  // Keep cart intact so customers can continue shopping
 
   if (loading) {
     return (
