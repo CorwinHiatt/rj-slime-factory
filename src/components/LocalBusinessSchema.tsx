@@ -96,7 +96,7 @@ export function ProductListSchema() {
           '@type': 'Product',
           name: 'Cotton Candy Cloud Slime',
           description: 'Dreamy, drizzly cloud slime with an airy cotton candy texture.',
-          offers: { '@type': 'Offer', price: '14.99', priceCurrency: 'USD', availability: 'https://schema.org/InStock' },
+          offers: { '@type': 'Offer', price: '13.99', priceCurrency: 'USD', availability: 'https://schema.org/InStock' },
         },
       },
       {
@@ -106,7 +106,7 @@ export function ProductListSchema() {
           '@type': 'Product',
           name: 'Midnight Galaxy Glitter Slime',
           description: 'Deep purple glitter slime with holographic star confetti.',
-          offers: { '@type': 'Offer', price: '15.99', priceCurrency: 'USD', availability: 'https://schema.org/InStock' },
+          offers: { '@type': 'Offer', price: '14.99', priceCurrency: 'USD', availability: 'https://schema.org/InStock' },
         },
       },
       {
@@ -116,7 +116,7 @@ export function ProductListSchema() {
           '@type': 'Product',
           name: 'Strawberry Butter Slime',
           description: 'Ultra-smooth butter slime that spreads like frosting.',
-          offers: { '@type': 'Offer', price: '14.99', priceCurrency: 'USD', availability: 'https://schema.org/InStock' },
+          offers: { '@type': 'Offer', price: '13.99', priceCurrency: 'USD', availability: 'https://schema.org/InStock' },
         },
       },
     ],
