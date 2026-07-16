@@ -29,7 +29,7 @@ export const metadata: Metadata = {
     template: '%s | RJ Slime Factory - Bend, OR',
   },
   description:
-    'Premium handcrafted slime launching soon from Bend, Oregon by young entrepreneur River Jordan Hiatt. Cloud slime, butter slime, clear slime, crunchy slime, and more. Join the waitlist to reserve yours — satisfying textures, custom scents, shipped nationwide.',
+    'Premium handcrafted slime from Bend, Oregon, made by young entrepreneur River Jordan Hiatt. Cloud slime, butter slime, clear slime, crunchy slime, and more. Order now — River handcrafts every order himself (please allow about 2–4 weeks). Satisfying textures, custom scents, shipped nationwide.',
   keywords: [
     'slime shop',
     'handmade slime',
@@ -71,13 +71,13 @@ export const metadata: Metadata = {
     siteName: 'RJ Slime Factory',
     title: 'RJ Slime Factory | Handcrafted Slime Shop in Bend, Oregon',
     description:
-      'Premium handcrafted slime launching soon from Bend, Oregon. Cloud, butter, clear, crunchy slime and more. Join the waitlist to reserve yours!',
+      'Premium handcrafted slime from Bend, Oregon, made to order by River Jordan Hiatt. Cloud, butter, clear, crunchy slime and more. Order yours today!',
   },
   twitter: {
     card: 'summary_large_image',
     title: 'RJ Slime Factory | Handcrafted Slime Shop in Bend, Oregon',
     description:
-      'Premium handcrafted slime launching soon from Bend, OR. Cloud, butter, clear, crunchy slime and more. Join the waitlist!',
+      'Premium handcrafted slime made to order in Bend, OR by River Jordan Hiatt. Cloud, butter, clear, crunchy slime and more. Order yours!',
   },
   robots: {
     index: true,

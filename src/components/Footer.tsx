@@ -38,7 +38,7 @@ export default function Footer() {
               Don&apos;t Miss Out
             </h3>
             <p className="text-gray-500 mb-8 text-[15px]">
-              Pre-order updates, production milestones, and launch news. Straight to your inbox.
+              Order updates, new drops, and slime news. Straight to your inbox.
             </p>
             <form
               className="flex flex-col sm:flex-row gap-3"
@@ -65,7 +65,7 @@ export default function Footer() {
           <div className="col-span-2">
             <Logo className="h-11 w-auto mb-5 brightness-0 invert opacity-80" />
             <p className="text-gray-500 text-sm leading-relaxed max-w-xs">
-              Handcrafted slime by a young entrepreneur in Bend, Oregon. Pre-order now to help fund our first production run.
+              Handcrafted slime by a young entrepreneur in Bend, Oregon. River makes every order by hand — please allow about 2–4 weeks.
             </p>
           </div>
 

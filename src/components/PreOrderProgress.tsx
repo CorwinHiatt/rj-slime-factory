@@ -28,8 +28,8 @@ export default function PreOrderProgress({ variant = 'default', showGift = true 
         <Target size={16} className="text-slime-purple flex-shrink-0" />
         <div className="flex-1 min-w-0">
           <div className="flex items-center justify-between text-xs mb-1">
-            <span className="font-display font-semibold text-slime-dark">{count}/{goal} Pre-Orders</span>
-            <span className="text-slime-purple font-medium">{spotsLeft} spots left</span>
+            <span className="font-display font-semibold text-slime-dark">{count}/{goal} Orders</span>
+            <span className="text-slime-purple font-medium">{spotsLeft} gift spots left</span>
           </div>
           <div className="w-full bg-gray-200 rounded-full h-1.5">
             <div
@@ -50,15 +50,15 @@ export default function PreOrderProgress({ variant = 'default', showGift = true 
             <Users size={18} className="text-white" />
           </div>
           <div>
-            <p className="font-display font-bold text-slime-dark text-sm">Pre-Order Campaign</p>
-            <p className="text-xs text-gray-400">First 50 orders fund our first production run</p>
+            <p className="font-display font-bold text-slime-dark text-sm">River Is Hard at Work</p>
+            <p className="text-xs text-gray-400">First 50 orders get an exclusive founder&apos;s gift</p>
           </div>
         </div>
 
         <div className="mb-3">
           <div className="flex items-center justify-between text-sm mb-2">
             <span className="font-display font-bold text-2xl text-slime-purple">{count}<span className="text-base text-gray-400 font-normal">/{goal}</span></span>
-            <span className="text-xs font-medium text-slime-teal bg-slime-teal/10 px-2.5 py-1 rounded-full">{spotsLeft} spots left</span>
+            <span className="text-xs font-medium text-slime-teal bg-slime-teal/10 px-2.5 py-1 rounded-full">{spotsLeft} gift spots left</span>
           </div>
           <div className="w-full bg-gray-100 rounded-full h-3">
             <div
@@ -75,7 +75,7 @@ export default function PreOrderProgress({ variant = 'default', showGift = true 
             <Gift size={16} className="text-slime-yellow flex-shrink-0 mt-0.5" />
             <div>
               <p className="text-xs font-display font-bold text-slime-dark">Exclusive Founder&apos;s Gift</p>
-              <p className="text-[11px] text-gray-500 leading-relaxed">First 50 pre-orders receive a special thank-you gift for believing in RJ Slime Factory from day one.</p>
+              <p className="text-[11px] text-gray-500 leading-relaxed">The first 50 orders receive a special thank-you gift for believing in RJ Slime Factory from day one.</p>
             </div>
           </div>
         )}
@@ -89,7 +89,7 @@ export default function PreOrderProgress({ variant = 'default', showGift = true 
       <div className="flex items-center justify-between mb-3">
         <div className="flex items-center gap-2">
           <Target size={18} className="text-slime-purple" />
-          <span className="font-display font-bold text-slime-dark">Pre-Order Progress</span>
+          <span className="font-display font-bold text-slime-dark">Orders So Far</span>
         </div>
         <span className="text-sm font-medium text-slime-purple">{count}/{goal}</span>
       </div>
@@ -102,15 +102,15 @@ export default function PreOrderProgress({ variant = 'default', showGift = true 
       </div>
 
       <div className="flex items-center justify-between text-xs text-gray-500">
-        <span>{spotsLeft} spots remaining</span>
-        <span>Shipping begins at 50 orders</span>
+        <span>{spotsLeft} founder&apos;s-gift spots left</span>
+        <span>Handcrafted &mdash; ships in ~2&ndash;4 weeks</span>
       </div>
 
       {showGift && (
         <div className="flex items-start gap-2.5 mt-4 p-3 bg-white rounded-xl">
           <Gift size={16} className="text-slime-yellow flex-shrink-0 mt-0.5" />
           <p className="text-xs text-gray-500">
-            <span className="font-semibold text-slime-dark">Exclusive gift</span> included with every pre-order &mdash; our thank you for believing in RJ Slime Factory!
+            <span className="font-semibold text-slime-dark">Exclusive gift</span> included with the first 50 orders &mdash; our thank you for believing in RJ Slime Factory!
           </p>
         </div>
       )}

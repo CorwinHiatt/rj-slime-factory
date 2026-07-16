@@ -39,11 +39,11 @@ async function sendOrderNotification(order: {
     await resend.emails.send({
       from: 'RJ Slime Factory <noreply@rjslimefactory.com>',
       to: TEAM_EMAILS,
-      subject: `New Pre-Order! ${order.orderId} — $${order.total.toFixed(2)} from ${order.shippingName}`,
+      subject: `New Order! ${order.orderId} — $${order.total.toFixed(2)} from ${order.shippingName}`,
       html: `
         <div style="font-family: -apple-system, BlinkMacSystemFont, sans-serif; max-width: 600px; margin: 0 auto; background: #ffffff;">
           <div style="background: linear-gradient(135deg, #8B5CF6, #FF6B9D); padding: 24px; border-radius: 12px 12px 0 0;">
-            <h1 style="color: white; margin: 0; font-size: 24px;">New Pre-Order Received!</h1>
+            <h1 style="color: white; margin: 0; font-size: 24px;">New Order Received!</h1>
             <p style="color: rgba(255,255,255,0.8); margin: 8px 0 0;">RJ Slime Factory</p>
           </div>
 
@@ -91,7 +91,7 @@ async function sendOrderNotification(order: {
 
             <div style="margin-top: 24px; padding: 16px; background: #f0fdf4; border-radius: 8px; border: 1px solid #bbf7d0;">
               <p style="margin: 0; color: #166534; font-size: 14px;">
-                <strong>Action needed:</strong> This order is a pre-order. Fulfill once we hit 50 orders and production begins. Don't forget the founder's gift!
+                <strong>Action needed:</strong> River handcrafts this order by hand — aim to make &amp; ship within ~2–4 weeks. Don't forget the founder's gift for the first 50 orders!
               </p>
             </div>
           </div>

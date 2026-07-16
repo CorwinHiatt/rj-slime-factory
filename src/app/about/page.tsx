@@ -6,21 +6,21 @@ import { ArrowRight, Heart, Sparkles, Shield, Leaf, Gift } from 'lucide-react';
 export const metadata: Metadata = {
   title: 'About RJ Slime Factory - Meet River Jordan Hiatt',
   description:
-    'Meet River Jordan Hiatt, the young entrepreneur behind RJ Slime Factory in Bend, Oregon. Learn about our pre-order model, how your support funds our first production run, and the exclusive founder\'s gift for our first 50 supporters.',
+    'Meet River Jordan Hiatt, the young entrepreneur behind RJ Slime Factory in Bend, Oregon. See how River handcrafts every order himself, why we ask for a little patience (about 2–4 weeks), and the exclusive founder\'s gift for the first 50 orders.',
   keywords: [
     'RJ Slime Factory about',
     'River Jordan Hiatt',
     'slime maker Bend Oregon',
     'young entrepreneur slime',
     'handcrafted slime story',
-    'slime pre-order',
+    'order slime online',
     'slime care guide',
     'how to care for slime',
   ],
   openGraph: {
     title: 'About RJ Slime Factory | Meet the Young Founder - Bend, OR',
     description:
-      'Meet River Jordan Hiatt, the young entrepreneur behind RJ Slime Factory. Pre-order now to help fund his first production run of handcrafted slime.',
+      'Meet River Jordan Hiatt, the young entrepreneur behind RJ Slime Factory. Order now — River handcrafts every order himself. Please allow about 2–4 weeks.',
     url: 'https://rjslime.xyz/about',
   },
   alternates: {
@@ -69,8 +69,8 @@ const timeline = [
   },
   {
     year: '2026',
-    title: 'Pre-Orders Launch',
-    description: 'RJ Slime Factory opens pre-orders for the first 50 supporters. Every pre-order directly funds manufacturing — and includes an exclusive founder\'s gift as a thank you for believing in the dream.',
+    title: 'Orders Open',
+    description: 'RJ Slime Factory opens for orders. River handcrafts every one himself around his busy schedule as a young entrepreneur — and the first 50 orders include an exclusive founder\'s gift as a thank you for believing in the dream.',
   },
 ];
 
@@ -99,13 +99,13 @@ export default function AboutPage() {
                 River Jordan Hiatt is a young entrepreneur with a passion that runs deep. After years of testing every slime texture on the market, RJ decided it was time to stop just buying slime &mdash; and start making it. He knows exactly what makes a slime satisfying: the perfect stretch, the right texture, the ideal sound.
               </p>
               <p className="text-lg text-gray-600 leading-relaxed mb-6">
-                But turning a dream into a business takes support. That&apos;s why RJ Slime Factory runs on a pre-order model: <strong>the first 50 orders directly fund our initial production run.</strong> Every pre-order is an investment in a young creator&apos;s vision &mdash; and every supporter receives an exclusive founder&apos;s gift as our way of saying thank you for the faith and belief in RJSLIME.
+                Today, River handcrafts every order himself, right here in Bend, Oregon. Because he&apos;s a busy young entrepreneur &mdash; juggling school, sports, and life &mdash; orders take a little time, so please allow about 2&ndash;4 weeks and thanks for your patience. <strong>Every order supports a real kid&apos;s real business</strong> &mdash; and the first 50 orders receive an exclusive founder&apos;s gift as our way of saying thank you for the faith and belief in RJSLIME.
               </p>
               <div className="flex items-start gap-3 p-4 bg-gradient-to-r from-slime-yellow/10 to-slime-pink/10 rounded-xl border border-slime-yellow/20">
                 <Gift size={20} className="text-slime-yellow flex-shrink-0 mt-0.5" />
                 <div>
                   <p className="font-display font-bold text-slime-dark text-sm">Exclusive Founder&apos;s Gift</p>
-                  <p className="text-sm text-gray-500">Every one of our first 50 pre-orders includes a special gift — our heartfelt thank you for believing in RJ and supporting a young entrepreneur from day one.</p>
+                  <p className="text-sm text-gray-500">The first 50 orders include a special gift — our heartfelt thank you for believing in RJ and supporting a young entrepreneur from day one.</p>
                 </div>
               </div>
             </div>
@@ -256,13 +256,13 @@ export default function AboutPage() {
             Be Part of Our First 50
           </h2>
           <p className="text-white/80 text-lg mb-8">
-            Pre-order your favorites and help fund RJ&apos;s dream. Every supporter gets an exclusive founder&apos;s gift.
+            Order your favorites and River will handcraft yours by hand. The first 50 orders get an exclusive founder&apos;s gift. (Please allow about 2&ndash;4 weeks.)
           </p>
           <Link
             href="/shop"
             className="inline-flex items-center px-10 py-4 bg-white text-slime-purple font-display font-bold rounded-full hover:scale-105 transition-transform shadow-xl text-lg"
           >
-            Pre-Order Now <ArrowRight size={20} className="ml-2" />
+            Order Now <ArrowRight size={20} className="ml-2" />
           </Link>
         </div>
       </section>

@@ -32,18 +32,18 @@ export default function Header() {
       <div className="bg-slime-dark text-white/80 text-xs font-medium overflow-hidden tracking-widest uppercase">
         <div className="animate-marquee-wrapper animate-marquee py-2.5">
           {[
-            'Pre-Orders OPEN — Only 50 spots available',
+            'Now Taking Orders — Handcrafted by River',
             'Free shipping on orders over $50',
-            'Exclusive founder\'s gift with every pre-order',
-            'Shipping begins once we hit 50 orders',
+            'Founder\'s gift for the first 50 orders',
+            'Handcrafted to order — allow ~2–4 weeks',
           ].flatMap((text, i) => [
             <span key={`a${i}`} className="mx-10 whitespace-nowrap">{text}</span>,
             <span key={`d${i}`} className="mx-2 text-slime-purple/60 whitespace-nowrap">&#9679;</span>,
           ]).concat([
-            'Pre-Orders OPEN — Only 50 spots available',
+            'Now Taking Orders — Handcrafted by River',
             'Free shipping on orders over $50',
-            'Exclusive founder\'s gift with every pre-order',
-            'Shipping begins once we hit 50 orders',
+            'Founder\'s gift for the first 50 orders',
+            'Handcrafted to order — allow ~2–4 weeks',
           ].flatMap((text, i) => [
             <span key={`b${i}`} className="mx-10 whitespace-nowrap">{text}</span>,
             <span key={`e${i}`} className="mx-2 text-slime-purple/60 whitespace-nowrap">&#9679;</span>,

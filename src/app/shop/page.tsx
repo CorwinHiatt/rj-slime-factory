@@ -55,10 +55,10 @@ function ShopContent() {
       <section className="bg-gradient-to-br from-slime-cream via-white to-purple-50 section-padding pb-8">
         <div className="max-w-7xl mx-auto text-center">
           <h1 className="font-display text-5xl sm:text-6xl font-bold mb-4">
-            Pre-Order <span className="gradient-text">Your Slimes</span>
+            Order <span className="gradient-text">Your Slimes</span>
           </h1>
           <p className="text-gray-500 max-w-lg mx-auto text-lg">
-            Browse our full collection and pre-order your favorites. Once we hit 50 orders, production begins and your slime ships with an exclusive founder&apos;s gift.
+            Browse the full collection and order your favorites. River handcrafts every order himself &mdash; please allow about 2&ndash;4 weeks. The first 50 orders ship with an exclusive founder&apos;s gift.
           </p>
         </div>
       </section>

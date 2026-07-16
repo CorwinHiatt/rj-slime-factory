@@ -27,9 +27,9 @@ const shippingOptions = [
   {
     icon: Clock,
     title: 'Processing Time',
-    time: '1-3 business days',
+    time: '~2–4 weeks',
     price: '',
-    note: 'All slime is made fresh to order',
+    note: 'Handcrafted to order by River',
   },
   {
     icon: Package,
@@ -56,7 +56,7 @@ export default function ShippingPage() {
             Shipping & <span className="gradient-text">Returns</span>
           </h1>
           <p className="text-gray-500 max-w-lg mx-auto text-lg">
-            Everything you need to know about pre-orders, shipping, and returns.
+            Everything you need to know about orders, shipping, and returns.
           </p>
         </div>
       </section>
@@ -87,19 +87,19 @@ export default function ShippingPage() {
       <section className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="space-y-8">
           <div>
-            <h2 className="font-display text-2xl font-bold mb-3">Pre-Order &amp; Shipping Policy</h2>
+            <h2 className="font-display text-2xl font-bold mb-3">Order &amp; Shipping Policy</h2>
             <div className="text-gray-600 space-y-3 leading-relaxed">
               <p>
-                RJ Slime Factory operates on a <strong>pre-order model</strong>. When you place a pre-order, your payment is processed immediately and goes directly toward funding our first production run. <strong>Shipping begins once we reach 50 pre-orders.</strong>
+                Every RJ Slime Factory order is <strong>handcrafted to order</strong> by River himself. When you place an order, your payment is processed immediately and your order goes straight into River&apos;s queue. Because he&apos;s a busy young entrepreneur balancing school, sports, and activities, <strong>please allow about 2&ndash;4 weeks</strong> for your order to be made and shipped &mdash; thanks for your patience!
               </p>
               <p>
-                Once production starts, orders are handcrafted from our studio in Bend, Oregon. Standard shipping within the United States takes <strong>3-5 business days</strong> after your order is made. You will receive a tracking number via email once your order ships.
+                Orders are handcrafted from our studio in Bend, Oregon. Standard shipping within the United States takes <strong>3-5 business days</strong> after your order is made. You will receive a tracking number via email once your order ships.
               </p>
               <p>
                 <strong>Free shipping</strong> is available on all orders of $50 or more. Orders under $50 have a flat rate of $5.99.
               </p>
               <p>
-                Every one of our first 50 pre-orders includes an <strong>exclusive founder&apos;s gift</strong> as our thank you for believing in RJ Slime Factory.
+                The first 50 orders include an <strong>exclusive founder&apos;s gift</strong> as our thank you for believing in RJ Slime Factory.
               </p>
             </div>
           </div>

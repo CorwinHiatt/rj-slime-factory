@@ -20,7 +20,7 @@ const contactInfo = [
     icon: Clock,
     title: 'Hours',
     detail: 'Mon-Fri 9AM-5PM PST',
-    sub: 'Pre-orders open now',
+    sub: 'Now taking orders',
   },
   {
     icon: Instagram,
@@ -32,19 +32,19 @@ const contactInfo = [
 
 const faqs = [
   {
-    question: 'How do pre-orders work?',
+    question: 'How do orders work?',
     answer:
-      'When you place a pre-order, your payment is processed immediately and goes directly toward funding our first production run. Once we hit 50 orders, we begin manufacturing and ship your slime along with an exclusive founder\'s gift.',
+      'When you place an order, your payment is processed immediately and your order goes straight to River. He handcrafts every order himself, and because he\'s a busy young entrepreneur (school, sports, and activities), please allow about 2–4 weeks. The first 50 orders also include an exclusive founder\'s gift.',
   },
   {
     question: 'When will my order ship?',
     answer:
-      'Shipping begins once we reach 50 pre-orders. We\'ll email you with updates on our progress and a shipping date once production starts. We anticipate hitting our goal soon!',
+      'River handcrafts every order by hand, so please allow about 2–4 weeks for your order to be made and shipped. We\'ll email you a tracking number as soon as it\'s on the way. Thanks for your patience!',
   },
   {
     question: 'What is the founder\'s gift?',
     answer:
-      'Every one of our first 50 pre-orders includes an exclusive thank-you gift from RJ himself. It\'s our way of showing gratitude for believing in RJ Slime Factory from the very beginning. The exact gift is a surprise!',
+      'The first 50 orders include an exclusive thank-you gift from RJ himself. It\'s our way of showing gratitude for believing in RJ Slime Factory from the very beginning. The exact gift is a surprise!',
   },
   {
     question: 'Do you ship internationally?',
@@ -62,9 +62,9 @@ const faqs = [
       'Yes! All our slimes are made with non-toxic, skin-safe ingredients. Recommended for ages 6+. Adult supervision recommended for younger children.',
   },
   {
-    question: 'Can I cancel my pre-order?',
+    question: 'Can I cancel my order?',
     answer:
-      'Yes, you can cancel your pre-order for a full refund before production begins. Once manufacturing starts (after we hit 50 orders), cancellations may not be possible. Contact us for details.',
+      'Yes — just reach out before River starts handcrafting your order and we\'ll issue a full refund. Once he\'s begun making it, cancellations may not be possible. Contact us and we\'ll help!',
   },
   {
     question: 'My slime is sticky/hard. What do I do?',

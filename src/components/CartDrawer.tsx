@@ -173,11 +173,11 @@ export default function CartDrawer() {
             </div>
 
             <button onClick={handleCheckout} className="btn-primary w-full text-center">
-              Pre-Order Now - ${subtotal.toFixed(2)}
+              Order Now - ${subtotal.toFixed(2)}
             </button>
 
             <p className="text-xs text-gray-400 text-center">
-              Pre-order &middot; Ships when we hit 50 orders &middot; Founder&apos;s gift included
+              Handcrafted to order &middot; Allow ~2&ndash;4 weeks &middot; Founder&apos;s gift for first 50
             </p>
           </div>
         )}

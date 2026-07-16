@@ -338,7 +338,7 @@ export default function CheckoutForm() {
       <div className="flex items-center gap-2 text-sm mb-6">
         <Link href="/shop" className="text-slime-purple hover:underline">Shop</Link>
         <ChevronRight size={14} className="text-gray-300" />
-        <span className="text-gray-400">Pre-Order Checkout</span>
+        <span className="text-gray-400">Checkout</span>
       </div>
 
       {/* Step progress bar */}
@@ -534,15 +534,15 @@ export default function CheckoutForm() {
 
               {/* Pre-order notice */}
               <div className="p-4 rounded-xl bg-slime-purple/5 border border-slime-purple/20 mb-6">
-                <p className="text-sm text-slime-dark font-medium mb-1">This is a pre-order</p>
-                <p className="text-xs text-gray-500">Your payment will be processed securely through Stripe. Your slime ships once we reach 50 pre-orders. Every pre-order includes an exclusive founder&apos;s gift!</p>
+                <p className="text-sm text-slime-dark font-medium mb-1">Handcrafted to order</p>
+                <p className="text-xs text-gray-500">Your payment will be processed securely through Stripe. River handcrafts every order himself, so please allow about 2&ndash;4 weeks. The first 50 orders include an exclusive founder&apos;s gift!</p>
               </div>
 
               {/* Founder's gift banner */}
               <div className="flex items-start gap-3 p-4 bg-gradient-to-r from-slime-yellow/10 to-slime-pink/10 rounded-xl border border-slime-yellow/20 mb-6">
                 <Gift size={18} className="text-slime-yellow flex-shrink-0 mt-0.5" />
                 <div>
-                  <p className="text-sm font-display font-bold text-slime-dark">Exclusive Founder&apos;s Gift Included</p>
+                  <p className="text-sm font-display font-bold text-slime-dark">Founder&apos;s Gift for the First 50 Orders</p>
                   <p className="text-xs text-gray-500">Thank you for believing in RJ Slime Factory!</p>
                 </div>
               </div>
@@ -564,7 +564,7 @@ export default function CheckoutForm() {
                   className="btn-primary flex-1 gap-2 disabled:opacity-60"
                 >
                   <Lock size={16} />
-                  Pre-Order &middot; ${total.toFixed(2)}
+                  Place Order &middot; ${total.toFixed(2)}
                 </button>
               </div>
 

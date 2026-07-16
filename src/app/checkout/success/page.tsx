@@ -60,7 +60,7 @@ function SuccessContent() {
       <div className="min-h-screen bg-gradient-to-b from-slime-cream to-white flex items-center justify-center">
         <div className="text-center">
           <Loader2 size={40} className="animate-spin text-slime-purple mx-auto mb-4" />
-          <p className="text-gray-500 font-display">Confirming your pre-order...</p>
+          <p className="text-gray-500 font-display">Confirming your order...</p>
         </div>
       </div>
     );
@@ -84,7 +84,7 @@ function SuccessContent() {
           </div>
           <h1 className="font-display text-3xl sm:text-4xl font-bold mb-3">Thank You for Believing in RJ!</h1>
           <p className="text-gray-500 text-lg mb-2">
-            Your pre-order is confirmed and means the world to us.
+            Your order is confirmed and means the world to us.
           </p>
           {order?.email && (
             <p className="text-gray-400 text-sm">
@@ -95,7 +95,7 @@ function SuccessContent() {
           {/* Pre-order number */}
           {preOrderNumber > 0 && (
             <div className="inline-flex items-center gap-2 px-5 py-2.5 bg-slime-purple/10 rounded-full mt-4">
-              <span className="text-sm text-gray-500">You&apos;re pre-order #</span>
+              <span className="text-sm text-gray-500">You&apos;re order #</span>
               <span className="font-display font-bold text-2xl text-slime-purple">
                 {preOrderNumber}
                 <span className="text-base text-gray-400 font-normal">/{preOrderGoal}</span>
@@ -122,8 +122,8 @@ function SuccessContent() {
         {preOrderNumber > 0 && (
           <div className="bg-white rounded-2xl border border-gray-100 p-5 shadow-sm mb-6">
             <div className="flex items-center justify-between mb-3">
-              <span className="font-display font-bold text-sm">Pre-Order Progress</span>
-              <span className="text-sm text-slime-purple font-medium">{spotsLeft} spots left</span>
+              <span className="font-display font-bold text-sm">Orders So Far</span>
+              <span className="text-sm text-slime-purple font-medium">{spotsLeft} gift spots left</span>
             </div>
             <div className="w-full bg-gray-100 rounded-full h-3 mb-3">
               <div
@@ -133,8 +133,8 @@ function SuccessContent() {
             </div>
             <p className="text-xs text-gray-500">
               {preOrderNumber < preOrderGoal
-                ? `${spotsLeft} more pre-orders until production begins and your slime ships!`
-                : 'We\'ve hit our goal! Production is starting and your slime will ship soon!'}
+                ? `You're one of our first 50 — an exclusive founder's gift is included! River handcrafts every order himself, so please allow about 2–4 weeks.`
+                : 'River is handcrafting your order by hand — please allow about 2–4 weeks. Thanks for your patience!'}
             </p>
           </div>
         )}
@@ -156,11 +156,11 @@ function SuccessContent() {
           </h3>
           <div className="space-y-4">
             {[
-              { label: 'Pre-order confirmed & payment processed', time: 'Just now', done: true },
+              { label: 'Order confirmed & payment processed', time: 'Just now', done: true },
               { label: 'Founder\'s gift secured for your order', time: 'Just now', done: true },
-              { label: 'Reaching our 50 pre-order goal', time: 'In progress — we\'re getting close!', done: false, active: true },
-              { label: 'Production & handcrafting begins', time: 'Estimated 2–4 weeks after goal is met', done: false },
-              { label: 'Your slime + founder\'s gift ships!', time: 'Estimated 4–6 weeks from now', done: false },
+              { label: 'River handcrafts your order by hand', time: 'In progress — thanks for your patience!', done: false, active: true },
+              { label: 'Handcrafted, quality-checked & packaged', time: 'Estimated 2–4 weeks', done: false },
+              { label: 'Your slime + founder\'s gift ships!', time: 'Right after it\'s made (3–5 day delivery)', done: false },
             ].map((s, i) => (
               <div key={i} className="flex items-start gap-3">
                 <div className="flex flex-col items-center">
@@ -185,7 +185,7 @@ function SuccessContent() {
               Questions About Your Order?
             </h3>
             <p className="text-gray-400 text-sm mb-5">
-              Want to check on the status of RJ Slime Factory or your pre-order? Reach out to any of us — we&apos;re happy to keep you in the loop!
+              Want to check on the status of your order? Reach out to any of us — we&apos;re happy to keep you in the loop!
             </p>
             <div className="space-y-2.5">
               {[
