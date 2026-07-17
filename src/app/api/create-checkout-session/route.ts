@@ -30,6 +30,7 @@ interface CheckoutSessionRequest {
 }
 
 const VALID_SHIPPING: Record<string, number> = {
+  pickup: 0,
   standard: 8.99,
   express: 18.99,
   overnight: 34.99,
@@ -51,14 +52,19 @@ export async function POST(request: Request) {
     // Validate
     const errors: string[] = [];
     if (!items || items.length === 0) errors.push('Cart is empty');
+    const isPickup = shippingMethodId === 'pickup';
     if (!shipping?.email?.trim()) errors.push('Email is required');
     if (!shipping?.firstName?.trim()) errors.push('First name is required');
     if (!shipping?.lastName?.trim()) errors.push('Last name is required');
-    if (!shipping?.address?.trim()) errors.push('Address is required');
-    if (!shipping?.city?.trim()) errors.push('City is required');
-    if (!shipping?.state?.trim()) errors.push('State is required');
-    if (!shipping?.zip?.trim()) errors.push('ZIP code is required');
-    if (!VALID_SHIPPING[shippingMethodId]) errors.push('Invalid shipping method');
+    if (!isPickup) {
+      // A shipping address is only required when the order is being shipped
+      if (!shipping?.address?.trim()) errors.push('Address is required');
+      if (!shipping?.city?.trim()) errors.push('City is required');
+      if (!shipping?.state?.trim()) errors.push('State is required');
+      if (!shipping?.zip?.trim()) errors.push('ZIP code is required');
+    }
+    // Use `in` so pickup ($0, a falsy value) is still recognized as valid
+    if (!(shippingMethodId in VALID_SHIPPING)) errors.push('Invalid shipping method');
 
     if (errors.length > 0) {
       return NextResponse.json({ error: errors.join(', ') }, { status: 400 });
@@ -82,15 +88,18 @@ export async function POST(request: Request) {
       quantity: item.quantity,
     }));
 
+    // Local pickup never carries a shipping charge, regardless of what the client sent
+    const effectiveShippingCost = isPickup ? 0 : shippingCost;
+
     // Add shipping as a line item if not free
-    if (shippingCost > 0) {
+    if (effectiveShippingCost > 0) {
       lineItems.push({
         price_data: {
           currency: 'usd',
           product_data: {
             name: `Shipping (${shippingMethodId.charAt(0).toUpperCase() + shippingMethodId.slice(1)})`,
           },
-          unit_amount: Math.round(shippingCost * 100),
+          unit_amount: Math.round(effectiveShippingCost * 100),
         },
         quantity: 1,
       });
@@ -113,7 +122,7 @@ export async function POST(request: Request) {
         shipping_state: shipping.state,
         shipping_zip: shipping.zip,
         shipping_method: shippingMethodId,
-        shipping_cost: shippingCost.toString(),
+        shipping_cost: effectiveShippingCost.toString(),
         items_json: JSON.stringify(items.map(i => ({
           productId: i.productId,
           name: i.name,

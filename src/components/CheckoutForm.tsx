@@ -21,6 +21,7 @@ import {
   Zap,
   Clock,
   Gift,
+  MapPin,
 } from 'lucide-react';
 import { useCart } from '@/context/CartContext';
 
@@ -171,6 +172,7 @@ export default function CheckoutForm() {
   });
   const [shippingErrors, setShippingErrors] = useState<Partial<Record<keyof ShippingData, string>>>({});
   const [selectedShippingMethod, setSelectedShippingMethod] = useState('standard');
+  const [isPickup, setIsPickup] = useState(false);
 
   // Payment redirect
   const [isRedirecting, setIsRedirecting] = useState(false);
@@ -179,7 +181,9 @@ export default function CheckoutForm() {
   // Calculated totals
   const shippingMethod = SHIPPING_METHODS.find((m) => m.id === selectedShippingMethod) || SHIPPING_METHODS[0];
   const freeShipping = subtotal >= FREE_SHIPPING_THRESHOLD;
-  const shippingCost = freeShipping && shippingMethod.id === 'standard' ? 0 : shippingMethod.price;
+  const effectiveMethodId = isPickup ? 'pickup' : shippingMethod.id;
+  const effectiveMethodName = isPickup ? 'Local Pickup' : shippingMethod.name;
+  const shippingCost = isPickup ? 0 : (freeShipping && shippingMethod.id === 'standard' ? 0 : shippingMethod.price);
   const tax = subtotal * TAX_RATE;
   const total = subtotal + shippingCost + tax;
 
@@ -206,15 +210,18 @@ export default function CheckoutForm() {
     else if (!validateEmail(shipping.email)) errors.email = 'Enter a valid email';
     if (!shipping.firstName.trim()) errors.firstName = 'Required';
     if (!shipping.lastName.trim()) errors.lastName = 'Required';
-    if (!shipping.address.trim()) errors.address = 'Address is required';
-    if (!shipping.city.trim()) errors.city = 'Required';
-    if (!shipping.state) errors.state = 'Required';
-    if (!shipping.zip.trim()) errors.zip = 'Required';
-    else if (!/^\d{5}(-\d{4})?$/.test(shipping.zip)) errors.zip = 'Invalid ZIP';
+    if (!isPickup) {
+      // Shipping address is only required when the order is being shipped
+      if (!shipping.address.trim()) errors.address = 'Address is required';
+      if (!shipping.city.trim()) errors.city = 'Required';
+      if (!shipping.state) errors.state = 'Required';
+      if (!shipping.zip.trim()) errors.zip = 'Required';
+      else if (!/^\d{5}(-\d{4})?$/.test(shipping.zip)) errors.zip = 'Invalid ZIP';
+    }
     if (shipping.phone && shipping.phone.replace(/\D/g, '').length < 10) errors.phone = 'Invalid phone';
     setShippingErrors(errors);
     return Object.keys(errors).length === 0;
-  }, [shipping]);
+  }, [shipping, isPickup]);
 
   /* ──────────── Navigation ──────────── */
 
@@ -228,8 +235,14 @@ export default function CheckoutForm() {
     e.preventDefault();
     if (validateInformation()) {
       saveSavedShipping(shipping);
-      setCompletedSteps((prev) => new Set(prev).add('information'));
-      goTo('shipping');
+      if (isPickup) {
+        // No shipping method to choose for local pickup — go straight to review
+        setCompletedSteps((prev) => new Set(prev).add('information').add('shipping'));
+        goTo('review');
+      } else {
+        setCompletedSteps((prev) => new Set(prev).add('information'));
+        goTo('shipping');
+      }
     }
   };
 
@@ -257,7 +270,7 @@ export default function CheckoutForm() {
             image: i.product.image,
           })),
           shipping,
-          shippingMethodId: selectedShippingMethod,
+          shippingMethodId: effectiveMethodId,
           shippingCost,
           subtotal,
         }),
@@ -380,6 +393,39 @@ export default function CheckoutForm() {
               {/* Contact & shipping form */}
               <form onSubmit={handleInformationSubmit} ref={formRef} autoComplete="on">
                 <h2 className="font-display text-lg font-bold mb-4 flex items-center gap-2">
+                  <Package size={18} className="text-slime-purple" />
+                  How would you like to get your slime?
+                </h2>
+
+                <div className="grid grid-cols-2 gap-3 mb-8">
+                  <button
+                    type="button"
+                    onClick={() => setIsPickup(false)}
+                    className={`flex items-start gap-3 p-4 rounded-2xl border-2 text-left transition-all ${!isPickup ? 'border-slime-purple bg-slime-purple/5 shadow-sm' : 'border-gray-100 hover:border-gray-200 bg-white'}`}
+                  >
+                    <Truck size={20} className={`flex-shrink-0 ${!isPickup ? 'text-slime-purple' : 'text-gray-400'}`} />
+                    <div>
+                      <p className="font-display font-semibold text-sm">Ship it to me</p>
+                      <p className="text-xs text-gray-400">Delivered to your address</p>
+                    </div>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setIsPickup(true)}
+                    className={`flex items-start gap-3 p-4 rounded-2xl border-2 text-left transition-all ${isPickup ? 'border-slime-purple bg-slime-purple/5 shadow-sm' : 'border-gray-100 hover:border-gray-200 bg-white'}`}
+                  >
+                    <MapPin size={20} className={`flex-shrink-0 ${isPickup ? 'text-slime-purple' : 'text-gray-400'}`} />
+                    <div>
+                      <p className="font-display font-semibold text-sm flex items-center gap-1.5">
+                        Local Pickup
+                        <span className="px-1.5 py-0.5 bg-slime-teal/10 text-slime-teal text-[10px] font-bold uppercase rounded-full">Free</span>
+                      </p>
+                      <p className="text-xs text-gray-400">Bend, OR &middot; no shipping</p>
+                    </div>
+                  </button>
+                </div>
+
+                <h2 className="font-display text-lg font-bold mb-4 flex items-center gap-2">
                   <Mail size={18} className="text-slime-purple" />
                   Contact Information
                 </h2>
@@ -390,8 +436,8 @@ export default function CheckoutForm() {
                 </div>
 
                 <h2 className="font-display text-lg font-bold mb-4 flex items-center gap-2">
-                  <Truck size={18} className="text-slime-purple" />
-                  Shipping Address
+                  {isPickup ? <MapPin size={18} className="text-slime-purple" /> : <Truck size={18} className="text-slime-purple" />}
+                  {isPickup ? 'Your Name' : 'Shipping Address'}
                 </h2>
 
                 <div className="space-y-3">
@@ -399,33 +445,46 @@ export default function CheckoutForm() {
                     <Input label="First name" value={shipping.firstName} onChange={(v) => updateShipping('firstName', v)} error={shippingErrors.firstName} autoComplete="given-name" />
                     <Input label="Last name" value={shipping.lastName} onChange={(v) => updateShipping('lastName', v)} error={shippingErrors.lastName} autoComplete="family-name" />
                   </div>
-                  <Input label="Address" value={shipping.address} onChange={(v) => updateShipping('address', v)} error={shippingErrors.address} autoComplete="address-line1" />
-                  <Input label="Apartment, suite, etc. (optional)" value={shipping.apartment} onChange={(v) => updateShipping('apartment', v)} autoComplete="address-line2" />
-                  <div className="grid grid-cols-6 gap-3">
-                    <div className="col-span-3">
-                      <Input label="City" value={shipping.city} onChange={(v) => updateShipping('city', v)} error={shippingErrors.city} autoComplete="address-level2" />
-                    </div>
-                    <div className="col-span-1">
-                      <label className="block text-xs font-medium text-gray-500 mb-1.5">State</label>
-                      <select
-                        value={shipping.state}
-                        onChange={(e) => updateShipping('state', e.target.value)}
-                        autoComplete="address-level1"
-                        name="state"
-                        className={`w-full px-3 py-2.5 rounded-xl border text-sm bg-white transition-colors focus:outline-none focus:ring-2 focus:ring-slime-purple/30 focus:border-slime-purple ${shippingErrors.state ? 'border-red-400' : 'border-gray-200'}`}
-                      >
-                        {US_STATES.map((s) => <option key={s.value} value={s.value}>{s.value || '—'}</option>)}
-                      </select>
-                      {shippingErrors.state && <p className="text-xs text-red-500 mt-1">{shippingErrors.state}</p>}
-                    </div>
-                    <div className="col-span-2">
-                      <Input label="ZIP" value={shipping.zip} onChange={(v) => updateShipping('zip', v.replace(/[^\d-]/g, '').slice(0, 10))} error={shippingErrors.zip} autoComplete="postal-code" placeholder="97701" />
-                    </div>
-                  </div>
+                  {!isPickup && (
+                    <>
+                      <Input label="Address" value={shipping.address} onChange={(v) => updateShipping('address', v)} error={shippingErrors.address} autoComplete="address-line1" />
+                      <Input label="Apartment, suite, etc. (optional)" value={shipping.apartment} onChange={(v) => updateShipping('apartment', v)} autoComplete="address-line2" />
+                      <div className="grid grid-cols-6 gap-3">
+                        <div className="col-span-3">
+                          <Input label="City" value={shipping.city} onChange={(v) => updateShipping('city', v)} error={shippingErrors.city} autoComplete="address-level2" />
+                        </div>
+                        <div className="col-span-1">
+                          <label className="block text-xs font-medium text-gray-500 mb-1.5">State</label>
+                          <select
+                            value={shipping.state}
+                            onChange={(e) => updateShipping('state', e.target.value)}
+                            autoComplete="address-level1"
+                            name="state"
+                            className={`w-full px-3 py-2.5 rounded-xl border text-sm bg-white transition-colors focus:outline-none focus:ring-2 focus:ring-slime-purple/30 focus:border-slime-purple ${shippingErrors.state ? 'border-red-400' : 'border-gray-200'}`}
+                          >
+                            {US_STATES.map((s) => <option key={s.value} value={s.value}>{s.value || '—'}</option>)}
+                          </select>
+                          {shippingErrors.state && <p className="text-xs text-red-500 mt-1">{shippingErrors.state}</p>}
+                        </div>
+                        <div className="col-span-2">
+                          <Input label="ZIP" value={shipping.zip} onChange={(v) => updateShipping('zip', v.replace(/[^\d-]/g, '').slice(0, 10))} error={shippingErrors.zip} autoComplete="postal-code" placeholder="97701" />
+                        </div>
+                      </div>
+                    </>
+                  )}
                 </div>
 
+                {isPickup && (
+                  <div className="flex items-start gap-3 p-4 mt-4 rounded-xl bg-slime-teal/5 border border-slime-teal/20">
+                    <MapPin size={18} className="text-slime-teal flex-shrink-0 mt-0.5" />
+                    <p className="text-xs text-gray-500">
+                      <span className="font-semibold text-slime-dark">Local pickup in Bend, Oregon.</span> No shipping charge &mdash; we&apos;ll email or text you to arrange a pickup time once your order is ready.
+                    </p>
+                  </div>
+                )}
+
                 <button type="submit" className="btn-primary w-full mt-8 gap-2">
-                  Continue to Shipping
+                  {isPickup ? 'Continue to Review' : 'Continue to Shipping'}
                   <ArrowRight size={16} />
                 </button>
               </form>
@@ -433,7 +492,7 @@ export default function CheckoutForm() {
           )}
 
           {/* ═══ STEP 2: SHIPPING METHOD ═══ */}
-          {step === 'shipping' && (
+          {step === 'shipping' && !isPickup && (
             <div className="animate-fade-in">
               {/* Show address summary */}
               <div className="bg-gray-50 rounded-2xl p-4 mb-6 flex items-start justify-between">
@@ -504,6 +563,32 @@ export default function CheckoutForm() {
             </div>
           )}
 
+          {/* ═══ STEP 2 (pickup): NO SHIPPING NEEDED ═══ */}
+          {step === 'shipping' && isPickup && (
+            <div className="animate-fade-in">
+              <div className="flex items-start gap-4 p-4 rounded-2xl border-2 border-slime-purple bg-slime-purple/5 shadow-sm">
+                <div className="w-10 h-10 rounded-xl bg-slime-purple text-white flex items-center justify-center flex-shrink-0">
+                  <MapPin size={18} />
+                </div>
+                <div className="flex-1">
+                  <div className="flex items-center gap-2">
+                    <p className="font-display font-semibold text-sm">Local Pickup</p>
+                    <span className="px-2 py-0.5 bg-slime-teal/10 text-slime-teal text-[10px] font-bold uppercase rounded-full">Free</span>
+                  </div>
+                  <p className="text-xs text-gray-400">Bend, OR &middot; no shipping &middot; we&apos;ll arrange a pickup time by email/text</p>
+                </div>
+              </div>
+              <div className="flex gap-3 mt-8">
+                <button onClick={() => goTo('information')} className="btn-secondary flex-1 gap-2">
+                  <ArrowLeft size={16} /> Back
+                </button>
+                <button onClick={handleShippingSubmit} className="btn-primary flex-1 gap-2">
+                  Review Order <ArrowRight size={16} />
+                </button>
+              </div>
+            </div>
+          )}
+
           {/* ═══ STEP 3: REVIEW & PAY ═══ */}
           {step === 'review' && (
             <div className="animate-fade-in">
@@ -514,12 +599,12 @@ export default function CheckoutForm() {
                   <button onClick={() => goTo('information')} className="text-xs text-slime-purple hover:underline font-medium">Change</button>
                 </div>
                 <div className="bg-gray-50 rounded-2xl p-4 flex items-center justify-between">
-                  <div className="text-sm"><span className="text-gray-400">Ship to: </span><span className="text-slime-dark">{shipping.address}, {shipping.city} {shipping.state}</span></div>
+                  <div className="text-sm"><span className="text-gray-400">{isPickup ? 'Pickup: ' : 'Ship to: '}</span><span className="text-slime-dark">{isPickup ? 'Local Pickup — Bend, OR' : `${shipping.address}, ${shipping.city} ${shipping.state}`}</span></div>
                   <button onClick={() => goTo('information')} className="text-xs text-slime-purple hover:underline font-medium">Change</button>
                 </div>
                 <div className="bg-gray-50 rounded-2xl p-4 flex items-center justify-between">
-                  <div className="text-sm"><span className="text-gray-400">Method: </span><span className="text-slime-dark">{shippingMethod.name} &middot; {freeShipping && shippingMethod.id === 'standard' ? 'FREE' : `$${shippingMethod.price.toFixed(2)}`}</span></div>
-                  <button onClick={() => goTo('shipping')} className="text-xs text-slime-purple hover:underline font-medium">Change</button>
+                  <div className="text-sm"><span className="text-gray-400">Method: </span><span className="text-slime-dark">{effectiveMethodName} &middot; {shippingCost === 0 ? 'FREE' : `$${shippingCost.toFixed(2)}`}</span></div>
+                  <button onClick={() => goTo(isPickup ? 'information' : 'shipping')} className="text-xs text-slime-purple hover:underline font-medium">Change</button>
                 </div>
               </div>
 
@@ -621,7 +706,7 @@ export default function CheckoutForm() {
               <div className="flex justify-between text-sm">
                 <span className="text-gray-500">Shipping</span>
                 <span className={`font-medium ${shippingCost === 0 ? 'text-slime-teal' : ''}`}>
-                  {step === 'information' ? (
+                  {step === 'information' && !isPickup ? (
                     <span className="text-gray-400 text-xs">Calculated next step</span>
                   ) : shippingCost === 0 ? 'FREE' : `$${shippingCost.toFixed(2)}`}
                 </span>
@@ -640,7 +725,7 @@ export default function CheckoutForm() {
             </div>
 
             {/* Free shipping progress */}
-            {!freeShipping && (
+            {!freeShipping && !isPickup && (
               <div className="mt-4 p-3 rounded-xl bg-slime-cream">
                 <div className="flex justify-between text-xs mb-1.5">
                   <span className="text-gray-500">${(FREE_SHIPPING_THRESHOLD - subtotal).toFixed(2)} away from free shipping</span>
@@ -654,10 +739,17 @@ export default function CheckoutForm() {
                 </div>
               </div>
             )}
-            {freeShipping && (
+            {freeShipping && !isPickup && (
               <div className="mt-4 p-2.5 bg-slime-teal/10 rounded-xl text-center">
                 <p className="text-xs text-slime-teal font-medium flex items-center justify-center gap-1">
                   <Check size={14} /> You qualify for FREE standard shipping!
+                </p>
+              </div>
+            )}
+            {isPickup && (
+              <div className="mt-4 p-2.5 bg-slime-teal/10 rounded-xl text-center">
+                <p className="text-xs text-slime-teal font-medium flex items-center justify-center gap-1">
+                  <MapPin size={14} /> Local pickup &mdash; no shipping charge!
                 </p>
               </div>
             )}

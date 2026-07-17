@@ -153,14 +153,17 @@ export async function GET(request: Request) {
       items = JSON.parse(metadata.items_json || '[]');
     } catch {}
 
-    // Build shipping address string
-    const shippingAddress = [
-      metadata.shipping_address,
-      metadata.shipping_apartment,
-      `${metadata.shipping_city}, ${metadata.shipping_state} ${metadata.shipping_zip}`,
-    ]
-      .filter(Boolean)
-      .join(', ');
+    // Build shipping address string (local pickup has no shipping address)
+    const shippingAddress =
+      shippingMethod === 'pickup'
+        ? 'LOCAL PICKUP — no shipping (arrange pickup time with customer)'
+        : [
+            metadata.shipping_address,
+            metadata.shipping_apartment,
+            `${metadata.shipping_city}, ${metadata.shipping_state} ${metadata.shipping_zip}`,
+          ]
+            .filter(Boolean)
+            .join(', ');
 
     // Send email notification to team
     await sendOrderNotification({
@@ -170,7 +173,9 @@ export async function GET(request: Request) {
       shippingName,
       shippingAddress,
       shippingMethod:
-        shippingMethod === 'standard'
+        shippingMethod === 'pickup'
+          ? 'Local Pickup (no shipping)'
+          : shippingMethod === 'standard'
           ? 'Standard Shipping'
           : shippingMethod === 'express'
           ? 'Express Shipping'
