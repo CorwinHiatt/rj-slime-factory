@@ -105,7 +105,19 @@ export async function POST(request: Request) {
       });
     }
 
-    const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://rjslime.xyz';
+    // NEXT_PUBLIC_SITE_URL has been misconfigured to a full path (the webhook URL)
+    // in production, which turned the post-payment redirect into a 404 and meant
+    // the success page never loaded (so no confirmation/receipt emails fired).
+    // Use only scheme+host and fall back to the production domain.
+    const baseUrl = (() => {
+      const raw = process.env.NEXT_PUBLIC_SITE_URL || 'https://rjslime.xyz';
+      try {
+        const u = new URL(raw);
+        return `${u.protocol}//${u.host}`;
+      } catch {
+        return 'https://rjslime.xyz';
+      }
+    })();
 
     // Create Stripe Checkout Session
     const session = await stripe.checkout.sessions.create({
