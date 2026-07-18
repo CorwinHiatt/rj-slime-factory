@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { getStripeServer } from '@/lib/stripe-server';
 import { Resend } from 'resend';
+import { generateReceiptPdf } from '@/lib/receipt-pdf';
 
 export const dynamic = 'force-dynamic';
 
@@ -17,6 +18,7 @@ const EMAIL_FROM = 'RJ Slime Factory <orders@rjslime.xyz>';
 interface OrderEmailData {
   sessionId: string;
   orderId: string;
+  dateStr: string;
   email: string;
   subtotal: number;
   shippingCost: number;
@@ -122,6 +124,28 @@ async function sendCustomerReceipt(order: OrderEmailData) {
     ? 'FREE'
     : `$${order.shippingCost.toFixed(2)}`;
 
+  // Generate the branded PDF receipt to attach. Degrade gracefully: if PDF
+  // generation ever fails, the receipt email still sends (without the file).
+  let attachments: { filename: string; content: string }[] | undefined;
+  try {
+    const pdf = await generateReceiptPdf({
+      orderId: order.orderId,
+      dateStr: order.dateStr,
+      shippingName: order.shippingName,
+      items: order.items,
+      subtotal: order.subtotal,
+      shippingCost: order.shippingCost,
+      total: order.total,
+      isPickup: order.isPickup,
+      shippingAddress: order.shippingAddress,
+    });
+    attachments = [
+      { filename: `RJ-Slime-Receipt-${order.orderId}.pdf`, content: Buffer.from(pdf).toString('base64') },
+    ];
+  } catch (e) {
+    console.error('Receipt PDF generation failed:', e);
+  }
+
   try {
     const { data, error } = await resend.emails.send(
       {
@@ -129,6 +153,7 @@ async function sendCustomerReceipt(order: OrderEmailData) {
         to: [order.email],
         replyTo: 'hello@rjslimefactory.com',
         subject: `Your RJ Slime order is confirmed! (${order.orderId})`,
+        attachments,
         html: `
         <div style="font-family: -apple-system, BlinkMacSystemFont, sans-serif; max-width: 600px; margin: 0 auto; background: #ffffff;">
           <div style="background: linear-gradient(135deg, #FF6B9D, #8B5CF6, #06D6A0); padding: 28px 24px; border-radius: 12px 12px 0 0; text-align: center;">
@@ -177,7 +202,9 @@ async function sendCustomerReceipt(order: OrderEmailData) {
               <p style="margin: 0; font-size: 14px; color: #92400e;">🎁 As one of our first 50 orders, an <strong>exclusive founder's gift</strong> is included with your order — our thank-you for believing in RJ Slime Factory from day one!</p>
             </div>
 
-            <p style="font-size: 13px; color: #9ca3af; margin-top: 22px; line-height: 1.6;">
+            <p style="font-size: 13px; color: #6b7280; margin-top: 20px; padding: 11px 14px; background: #faf7ff; border-radius: 10px;">📎 A PDF copy of your receipt is attached to this email.</p>
+
+            <p style="font-size: 13px; color: #9ca3af; margin-top: 16px; line-height: 1.6;">
               Questions about your order? Just reply to this email or reach us at hello@rjslimefactory.com.<br>
               RJ Slime Factory · rjslime.xyz · Bend, Oregon
             </p>
@@ -237,6 +264,11 @@ export async function GET(request: Request) {
     // Deterministic order id derived from the Stripe session — stable across page
     // refreshes (so the same order isn't shown with a new id every reload).
     const orderId = `RJS-${session.id.slice(-10).toUpperCase()}`;
+    const dateStr = new Date((session.created || 0) * 1000).toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+    });
     const total = (session.amount_total || 0) / 100;
     const email = session.customer_email || '';
     const shippingName = metadata.shipping_name || '';
@@ -274,6 +306,7 @@ export async function GET(request: Request) {
     const orderData: OrderEmailData = {
       sessionId: session.id,
       orderId,
+      dateStr,
       email,
       subtotal,
       shippingCost,
