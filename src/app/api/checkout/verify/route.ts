@@ -151,7 +151,7 @@ async function sendCustomerReceipt(order: OrderEmailData) {
       {
         from: EMAIL_FROM,
         to: [order.email],
-        replyTo: 'hello@rjslimefactory.com',
+        replyTo: 'corwin@coleesoftwareservices.com',
         subject: `Your RJ Slime order is confirmed! (${order.orderId})`,
         attachments,
         html: `
