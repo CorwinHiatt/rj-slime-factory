@@ -11,9 +11,9 @@ const TEAM_EMAILS = [
   'hronquillo7@gmail.com',
 ];
 
-// Must be an address on a domain VERIFIED in Resend. rjslime.xyz is verified;
-// rjslimefactory.com is NOT, which is why previous sends silently failed.
-const EMAIL_FROM = 'RJ Slime Factory <orders@rjslime.xyz>';
+// Must be an address on a domain VERIFIED in Resend. rjslime.xyz is no longer
+// verified on the account, so mail goes out via mail.coleesoftwareservices.com.
+const EMAIL_FROM = 'RJ Slime Factory <orders@mail.coleesoftwareservices.com>';
 
 interface OrderEmailData {
   sessionId: string;
